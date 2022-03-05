@@ -1,6 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/services/users.service';
 import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
+import { UserRegistryDTO } from 'src/users/models/user-registry.dto';
+import { UserLoginDTO } from 'src/users/models/user-login.dto';
+import { User } from 'src/users/models/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -9,20 +13,48 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(email: string, pass: string): Promise<any> {
-    const user = await this.usersService.findOneByEmail(email);
-    if (user) {
-      const { password, ...result } = user;
-      return result;
+  async validateUser(email: string): Promise<any> {
+    const user = await this.usersService.findOneByEmail(email.toLowerCase());
+
+    if (!user) {
+      throw new HttpException('USER_NOT_FOUND', HttpStatus.NOT_FOUND);
     }
-    return null;
+
+    return user;
   }
 
-  async login(body: any) {
-    const payload = { email: body.email, sub: body.userId };
+  async userExists(userDTO: UserRegistryDTO) {
+    const user = await this.usersService.findOneByEmail(
+      userDTO.email.toLowerCase(),
+    );
+
+    if (user) {
+      throw new HttpException(
+        'USER_IS_ALREADY_REGISTERED',
+        HttpStatus.CONFLICT,
+      );
+    }
+  }
+
+  async createUser(userDTO: UserRegistryDTO) {
+    const user = await this.usersService.create(userDTO);
+  }
+
+  async login(user: User) {
+    const payload = { id: user.id, email: user.email };
 
     return {
       access_token: this.jwtService.sign(payload),
     };
+  }
+
+  async validatePassword(password: string, user: User) {
+    const encryptedPassword = await this.usersService.findPassword(user.id);
+
+    const isValid = await bcrypt.compare(password, encryptedPassword);
+
+    if (!isValid) {
+      throw new HttpException('WRONG_PASSWORD', HttpStatus.FORBIDDEN);
+    }
   }
 }
