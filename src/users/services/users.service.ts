@@ -6,4 +6,8 @@ import { User } from '../models/user.entity';
 @Injectable()
 export class UsersService {
   constructor(@InjectRepository(User) private userRepo: Repository<User>) {}
+
+  async findOneByEmail(email: string): Promise<User | undefined> {
+    return this.userRepo.findOne({ email });
+  }
 }
