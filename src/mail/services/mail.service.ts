@@ -2,40 +2,18 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 
-import { createCipheriv } from 'crypto';
 import { User } from 'src/users/models/user.entity';
-import { cryptoConstants } from '../constants/constants';
 
 @Injectable()
 export class MailService {
   constructor(private mailerService: MailerService) {}
 
-  async sendUserConfirmation(email: string) {
-    /**
-     * Data encryption
-     */
-
-    const cipher = createCipheriv(
-      cryptoConstants.ALGORITHM,
-      cryptoConstants.KEY,
-      cryptoConstants.INITIAL_VECTOR,
-    );
-    const obj = { email, date: Date.now() };
-    let transactionToken = cipher.update(
-      JSON.stringify(obj),
-      cryptoConstants.INPUT_ENCODING,
-      cryptoConstants.OUTPUT_ENCODING,
-    );
-    transactionToken += cipher.final('hex');
-
-    /**
-     * Sending the email
-     */
-
-    const url = `example.com/auth/confirm?transaction-token=${transactionToken}`;
+  async sendUserConfirmation(email: string, registryUUID: string) {
+    const url = `example.com/auth/confirm?registry-uuid=${registryUUID}`;
     await this.mailerService.sendMail({
       to: email,
-      subject: 'Welcome to Roofstore! Please, confirm your email',
+      subject:
+        'Bienvenido a Librería Punto & Coma! Por favor, confirma tu email',
       template: '../registry-confirmation',
       context: {
         url,
@@ -43,8 +21,8 @@ export class MailService {
     });
   }
 
-  @OnEvent('user.created')
-  handleUserCreatedEvent(user: User) {
-    this.sendUserConfirmation(user.email);
+  @OnEvent('confirm.registration')
+  handleUserCreatedEvent(user: User, registryUUID: string) {
+    this.sendUserConfirmation(user.email, registryUUID);
   }
 }
