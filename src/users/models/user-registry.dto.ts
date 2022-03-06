@@ -9,7 +9,58 @@ import {
 import { StringMatch } from '../validators/string-match.decorator';
 
 export class UserRegistryDTO {
-  @IsString()
+  @IsString({
+    message: 'FIRSTNAME_MUST_BE_STRING',
+  })
+  @MinLength(3, {
+    message: 'FIRSTNAME_MIN_LENGTH: 3',
+  })
+  @MaxLength(16, {
+    message: 'FIRSTNAME_MAX_LENGTH: 16',
+  })
+  @ApiProperty({
+    description: 'User lastname',
+    type: String,
+  })
+  @ApiProperty({
+    description: 'User firstname',
+    type: String,
+  })
+  firstname: string;
+
+  @IsString({
+    message: 'LASTNAME_MUST_BE_STRING',
+  })
+  @MinLength(3, {
+    message: 'LASTNAME_MIN_LENGTH: 3',
+  })
+  @MaxLength(16, {
+    message: 'LASTNAME_MAX_LENGTH: 16',
+  })
+  @ApiProperty({
+    description: 'User lastname',
+    type: String,
+  })
+  lastname: string;
+
+  @IsString({
+    message: 'PHONE_MUST_BE_STRING',
+  })
+  @MinLength(6, {
+    message: 'PHONE_MIN_LENGTH: 6',
+  })
+  @MaxLength(30, {
+    message: 'PHONE_MAX_LENGTH: 30',
+  })
+  @ApiProperty({
+    description: 'User phone number',
+    type: String,
+  })
+  phone: string;
+
+  @IsString({
+    message: 'PASSWORD_MUST_BE_STRING',
+  })
   @MinLength(8, {
     message: 'PASSWORD_MIN_LENGTH: 8',
   })

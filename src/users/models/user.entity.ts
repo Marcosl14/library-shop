@@ -1,5 +1,6 @@
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import {
+  BeforeInsert,
   Column,
   CreateDateColumn,
   DeleteDateColumn,
@@ -19,6 +20,42 @@ export class User {
     type: 'bigint',
   })
   id: number;
+
+  @ApiProperty({
+    description: 'User firstname',
+    type: String,
+  })
+  @Column({
+    name: 'firstname',
+    type: 'character varying',
+    length: 30,
+    nullable: false,
+  })
+  firstname: string;
+
+  @ApiProperty({
+    description: 'User lastname',
+    type: String,
+  })
+  @Column({
+    name: 'lastname',
+    type: 'character varying',
+    length: 30,
+    nullable: false,
+  })
+  lastname: string;
+
+  @ApiProperty({
+    description: 'User phone number',
+    type: String,
+  })
+  @Column({
+    name: 'phone',
+    type: 'character varying',
+    length: 50,
+    nullable: false,
+  })
+  phone: string;
 
   @ApiHideProperty()
   @Column({
@@ -68,4 +105,11 @@ export class User {
     select: false,
   })
   deletedAt?: Date;
+
+  @BeforeInsert()
+  async lowerCaseAtributes() {
+    this.firstname = this.firstname.toLowerCase();
+    this.lastname = this.lastname.toLowerCase();
+    this.email = this.email.toLowerCase();
+  }
 }
