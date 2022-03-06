@@ -13,7 +13,7 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string): Promise<any> {
-    const user = await this.usersService.findOneByEmail(email.toLowerCase());
+    const user = await this.usersService.findOneByEmail(email);
 
     if (!user) {
       throw new HttpException('USER_NOT_FOUND', HttpStatus.NOT_FOUND);
@@ -23,9 +23,7 @@ export class AuthService {
   }
 
   async userExists(userDTO: UserRegistryDTO) {
-    const user = await this.usersService.findOneByEmail(
-      userDTO.email.toLowerCase(),
-    );
+    const user = await this.usersService.findOneByEmail(userDTO.email);
 
     if (user) {
       throw new HttpException(

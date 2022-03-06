@@ -9,7 +9,7 @@ export class UsersService {
   constructor(@InjectRepository(User) private userRepo: Repository<User>) {}
 
   async findOneByEmail(email: string): Promise<User | undefined> {
-    return this.userRepo.findOne({ email });
+    return this.userRepo.findOne({ email: email.toLowerCase() });
   }
 
   async findPassword(id: number): Promise<string> {
@@ -18,11 +18,11 @@ export class UsersService {
   }
 
   async create(userDTO: UserRegistryDTO): Promise<User> {
-    const user: User = await this.userRepo.create({
-      email: userDTO.email.toLowerCase(),
-      password: userDTO.password,
-    });
-
+    const user: User = await this.userRepo.create(userDTO);
     return await this.userRepo.save(user);
+  }
+
+  async delete(id: number): Promise<void> {
+    await this.userRepo.softDelete(id);
   }
 }

@@ -7,7 +7,7 @@ export class UserLoginDTO {
     type: String,
   })
   @IsString({
-    message: 'PASSWORD_MUST_BE_A_STRING',
+    message: 'PASSWORD_MUST_BE_STRING',
   })
   @IsNotEmpty({
     message: 'EMPTY_PASSWORD_FIELD',
