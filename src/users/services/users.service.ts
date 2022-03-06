@@ -19,7 +19,10 @@ export class UsersService {
 
   async create(userDTO: UserRegistryDTO): Promise<User> {
     const user: User = await this.userRepo.create(userDTO);
-
     return await this.userRepo.save(user);
+  }
+
+  async delete(id: number): Promise<void> {
+    await this.userRepo.softDelete(id);
   }
 }
