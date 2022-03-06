@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { v4 as uuid } from 'uuid';
+
 import { UserRegistryDTO } from '../models/user-registry.dto';
 import { User } from '../models/user.entity';
 
@@ -10,6 +12,23 @@ export class UsersService {
 
   async findOneByEmail(email: string): Promise<User | undefined> {
     return this.userRepo.findOne({ email: email.toLowerCase() });
+  }
+
+  async findOneByRegistryUUID(registryUUID: string): Promise<User | undefined> {
+    return this.userRepo.findOne({ registryUUID });
+  }
+
+  async updateConfirmRegistration(id: number): Promise<void> {
+    this.userRepo.update({ id }, { confirmedRegistration: true });
+  }
+
+  async updateRegistryUUID(id: number, registryUUID: uuid): Promise<void> {
+    this.userRepo.update({ id }, { registryUUID });
+  }
+
+  async findUpdatedAt(id: number): Promise<Date> {
+    const user = await this.userRepo.findOne(id, { select: ['updatedAt'] });
+    return user.updatedAt;
   }
 
   async findPassword(id: number): Promise<string> {
