@@ -23,8 +23,7 @@ export class AuthController {
   }
 
   @Public()
-  @UseGuards(LocalAuthGuard)
-  @UseGuards(ThrottlerGuard)
+  @UseGuards(LocalAuthGuard, ThrottlerGuard)
   @Post('login')
   async login(@Body() userDTO: UserLoginDTO, @Req() req) {
     await this.authService.validatePassword(userDTO.password, req.user);
