@@ -31,7 +31,7 @@ export class User {
   password: string;
 
   @ApiProperty({
-    description: 'Email valid of user ',
+    description: 'User Email',
     type: String,
   })
   @Column({
@@ -68,15 +68,4 @@ export class User {
     select: false,
   })
   deletedAt?: Date;
-
-  //   @ApiHideProperty()
-  //   @Column({
-  //     type: 'integer',
-  //     nullable: false,
-  //     name: 'account_status',
-  //     default: AccountStatusesEnum.PENDING,
-  //     enum: AccountStatusesEnum,
-  //     select: false,
-  //   })
-  //   account_status: AccountStatusesEnum;
 }
