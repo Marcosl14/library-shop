@@ -8,6 +8,7 @@ import { AppService } from './app.service';
 
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -24,9 +25,13 @@ import { AuthModule } from './auth/auth.module';
       synchronize: true,
     }),
 
-    UsersModule,
+    ThrottlerModule.forRoot({
+      ttl: 60,
+      limit: 100,
+    }),
 
     AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
