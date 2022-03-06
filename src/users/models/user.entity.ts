@@ -80,6 +80,24 @@ export class User {
   email: string;
 
   @ApiHideProperty()
+  @Column({
+    name: 'registry_uuid',
+    type: 'uuid',
+    nullable: false,
+    select: false,
+  })
+  registryUUID: string;
+
+  @ApiHideProperty()
+  @Column({
+    name: 'confirmed_registration',
+    type: 'boolean',
+    nullable: false,
+    default: false,
+  })
+  confirmedRegistration: boolean;
+
+  @ApiHideProperty()
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamptz',
