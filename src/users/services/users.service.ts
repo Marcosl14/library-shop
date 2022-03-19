@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { v4 as uuid } from 'uuid';
+import * as bcrypt from 'bcrypt';
 
 import { UserRegistryDTO } from '../models/user-registry.dto';
 import { User } from '../models/user.entity';
@@ -36,12 +37,28 @@ export class UsersService {
     return user.password;
   }
 
+  async validatePassword(password: string, user: User) {
+    const encryptedPassword = await this.findPassword(user.id);
+
+    const isValid = await bcrypt.compare(password, encryptedPassword);
+
+    if (!isValid) {
+      throw new HttpException('WRONG_PASSWORD', HttpStatus.FORBIDDEN);
+    }
+  }
+
   async create(userDTO: UserRegistryDTO): Promise<User> {
+    userDTO.password = await this.encryptPassword(userDTO.password);
+
     const user: User = await this.userRepo.create(userDTO);
     return await this.userRepo.save(user);
   }
 
   async delete(id: number): Promise<void> {
     await this.userRepo.softDelete(id);
+  }
+
+  async encryptPassword(password: string) {
+    return await bcrypt.hash(password, 10);
   }
 }

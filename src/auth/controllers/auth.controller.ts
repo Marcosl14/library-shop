@@ -7,7 +7,6 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
 import { UserRegistryDTO } from 'src/users/models/user-registry.dto';
 import { UserLoginDTO } from 'src/users/models/user-login.dto';
 import { Public } from '../decorators/public.decorator';
@@ -16,10 +15,14 @@ import { LocalAuthGuard } from '../guards/local-auth.guard';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { ConfirmRegistrationDTO } from '../models/confirm-registration.dto';
 import { isUUID } from 'class-validator';
+import { UsersService } from 'src/users/services/users.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private userService: UsersService,
+  ) {}
 
   @Public()
   @UseGuards(ThrottlerGuard)
@@ -39,8 +42,6 @@ export class AuthController {
         await this.authService.updateRegistryUUID(userDTO);
       }
     } else {
-      userDTO.password = await this.encryptPassword(userDTO.password);
-
       await this.authService.createUser(userDTO);
     }
   }
@@ -64,12 +65,8 @@ export class AuthController {
   @UseGuards(LocalAuthGuard, ThrottlerGuard)
   @Post('login')
   async login(@Body() userDTO: UserLoginDTO, @Req() req) {
-    await this.authService.validatePassword(userDTO.password, req.user);
+    await this.userService.validatePassword(userDTO.password, req.user);
 
     return this.authService.login(req.user);
-  }
-
-  async encryptPassword(password: string) {
-    return await bcrypt.hash(password, 10);
   }
 }
