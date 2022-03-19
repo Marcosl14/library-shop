@@ -1,12 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/services/users.service';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
-import { UserRegistryDTO } from 'src/users/models/user-registry.dto';
+import { UserRegistrationDTO } from 'src/users/models/user-registration.dto';
 import { User } from 'src/users/models/user.entity';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { auth_constants } from '../constants/constants';
+import { UserLoginDTO } from 'src/users/models/user-login.dto';
 
 @Injectable()
 export class AuthService {
@@ -30,7 +30,9 @@ export class AuthService {
     return user;
   }
 
-  async userExists(userDTO: UserRegistryDTO): Promise<User | undefined> {
+  async userExists(
+    userDTO: UserRegistrationDTO | UserLoginDTO,
+  ): Promise<User | undefined> {
     return await this.usersService.findOneByEmail(userDTO.email);
   }
 
@@ -38,7 +40,7 @@ export class AuthService {
     return uuid();
   }
 
-  async updateRegistryUUID(userDTO: UserRegistryDTO) {
+  async updateRegistryUUID(userDTO: UserRegistrationDTO) {
     const user: User = await this.usersService.findOneByEmail(userDTO.email);
 
     const registryUUID = this.createRegistryUUID();
@@ -48,7 +50,7 @@ export class AuthService {
     this.eventEmitter.emit('registration.update_uuid', user, registryUUID);
   }
 
-  async createUser(userDTO: UserRegistryDTO) {
+  async createUser(userDTO: UserRegistrationDTO) {
     const registryUUID = this.createRegistryUUID();
 
     const newUser = { ...userDTO, registryUUID };

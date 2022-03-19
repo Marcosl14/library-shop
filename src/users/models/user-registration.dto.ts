@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 import { StringMatch } from '../validators/string-match.decorator';
 
-export class UserRegistryDTO {
+export class UserRegistrationDTO {
   @IsString({
     message: 'FIRSTNAME_MUST_BE_STRING',
   })
