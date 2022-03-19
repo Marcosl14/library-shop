@@ -11,7 +11,6 @@ import {
 import {
   ApiBearerAuth,
   ApiBody,
-  ApiForbiddenResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
@@ -30,7 +29,6 @@ export class UsersController {
 
   @HttpCode(200)
   @ApiOperation({ summary: 'Get the username' })
-  @ApiBody({ type: UserLoginDTO })
   @ApiOkResponse({
     status: 200,
     description: 'Get the username',

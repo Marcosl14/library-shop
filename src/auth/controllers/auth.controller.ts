@@ -49,7 +49,7 @@ export class AuthController {
     description: 'The user is allready registered',
     status: 409,
     schema: {
-      examples: {
+      example: {
         statusCode: 409,
         message: 'USER_IS_ALREADY_REGISTERED',
       },
@@ -171,7 +171,7 @@ export class AuthController {
     description: 'The provided password is not valid',
     status: 403,
     schema: {
-      examples: {
+      example: {
         statusCode: 403,
         message: 'WRONG_PASSWORD',
       },
