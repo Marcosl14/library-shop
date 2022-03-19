@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 import * as bcrypt from 'bcrypt';
 
-import { UserRegistryDTO } from '../models/user-registry.dto';
+import { UserRegistrationDTO } from '../models/user-registration.dto';
 import { User } from '../models/user.entity';
 
 @Injectable()
@@ -47,7 +47,7 @@ export class UsersService {
     }
   }
 
-  async create(userDTO: UserRegistryDTO): Promise<User> {
+  async create(userDTO: UserRegistrationDTO): Promise<User> {
     userDTO.password = await this.encryptPassword(userDTO.password);
 
     const user: User = await this.userRepo.create(userDTO);
