@@ -45,7 +45,7 @@ export class AuthService {
 
     await this.usersService.updateRegistryUUID(user.id, registryUUID);
 
-    this.eventEmitter.emit('confirm.registration', user, registryUUID);
+    this.eventEmitter.emit('registration.update_uuid', user, registryUUID);
   }
 
   async createUser(userDTO: UserRegistryDTO) {
@@ -55,7 +55,7 @@ export class AuthService {
 
     const user = await this.usersService.create(newUser);
 
-    this.eventEmitter.emit('confirm.registration', user, registryUUID);
+    this.eventEmitter.emit('registration.in_progress', user, registryUUID);
   }
 
   async login(user: User) {

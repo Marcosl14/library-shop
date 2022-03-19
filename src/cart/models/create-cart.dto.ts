@@ -1,13 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column } from 'typeorm';
+import { User } from 'src/users/models/user.entity';
 
-export class Cart {
+export class CreateCartDTO {
   @ApiProperty({
     description: 'User Id',
     type: Number,
   })
-  @Column({
-    type: 'number',
-  })
-  userId: number;
+  user: User;
 }
