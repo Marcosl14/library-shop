@@ -66,16 +66,6 @@ export class AuthService {
     };
   }
 
-  async validatePassword(password: string, user: User) {
-    const encryptedPassword = await this.usersService.findPassword(user.id);
-
-    const isValid = await bcrypt.compare(password, encryptedPassword);
-
-    if (!isValid) {
-      throw new HttpException('WRONG_PASSWORD', HttpStatus.FORBIDDEN);
-    }
-  }
-
   async confirmRegistration(registryUUID: string) {
     const user = await this.usersService.findOneByRegistryUUID(registryUUID);
 
