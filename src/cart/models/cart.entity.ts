@@ -1,9 +1,13 @@
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
+import { User } from 'src/users/models/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
+  RelationId,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -19,11 +23,16 @@ export class Cart {
   })
   id: number;
 
-  @ApiHideProperty()
-  @Column({
-    name: 'user_id',
-    type: 'bigint',
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'user_id' })
+  @ApiProperty({
+    type: () => User,
+    description: 'Owner of the cart',
   })
+  user: User;
+
+  @ApiHideProperty()
+  @RelationId((cart: Cart) => cart.user)
   userId: number;
 
   @ApiHideProperty()

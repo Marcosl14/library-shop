@@ -1,23 +1,28 @@
 import { Module } from '@nestjs/common';
 
 import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
-import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
-import { ThrottlerModule } from '@nestjs/throttler';
-import { MailModule } from './mail/mail.module';
 import { CartModule } from './cart/cart.module';
+import { MailModule } from './mail/mail.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
 
     EventEmitterModule.forRoot(),
+
+    ThrottlerModule.forRoot({
+      ttl: 60,
+      limit: 100,
+    }),
 
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -30,15 +35,10 @@ import { CartModule } from './cart/cart.module';
       synchronize: true,
     }),
 
-    ThrottlerModule.forRoot({
-      ttl: 60,
-      limit: 100,
-    }),
-
     AuthModule,
-    UsersModule,
-    MailModule,
     CartModule,
+    MailModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

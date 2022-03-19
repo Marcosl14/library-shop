@@ -1,10 +1,12 @@
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
+import { Cart } from 'src/cart/models/cart.entity';
 import {
   BeforeInsert,
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -123,6 +125,9 @@ export class User {
     select: false,
   })
   deletedAt?: Date;
+
+  @OneToMany(() => Cart, (cart) => cart.user)
+  carts: Cart[];
 
   @BeforeInsert()
   async lowerCaseAtributes() {

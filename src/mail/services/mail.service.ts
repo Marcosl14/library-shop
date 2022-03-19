@@ -21,8 +21,13 @@ export class MailService {
     });
   }
 
-  @OnEvent('confirm.registration')
-  handleUserCreatedEvent(user: User, registryUUID: string) {
+  @OnEvent('registration.in_progress')
+  resendConfirmationEmail(user: User, registryUUID: string) {
+    this.sendUserConfirmation(user.email, registryUUID);
+  }
+
+  @OnEvent('registration.update_uuid')
+  sendConfirmationEmail(user: User, registryUUID: string) {
     this.sendUserConfirmation(user.email, registryUUID);
   }
 }
