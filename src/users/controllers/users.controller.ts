@@ -65,19 +65,8 @@ export class UsersController {
       },
     },
   })
-  @ApiNotFoundResponse({
-    description: 'The provided user was not found',
-    status: 404,
-    schema: {
-      example: {
-        statusCode: 404,
-        message: 'USER_NOT_FOUND',
-      },
-    },
-  })
   @Get()
   async username(@Req() req) {
-    // first verify if user exists (could be soft-deleted)
     const user: User = await this.userService.findOneById(req.user.id);
     return { username: user.email };
   }
@@ -109,16 +98,6 @@ export class UsersController {
       },
     },
   })
-  @ApiNotFoundResponse({
-    description: 'The provided user was not found',
-    status: 404,
-    schema: {
-      example: {
-        statusCode: 404,
-        message: 'USER_NOT_FOUND',
-      },
-    },
-  })
   @ApiConflictResponse({
     description: 'Password and new password are equal',
     status: 409,
@@ -140,10 +119,6 @@ export class UsersController {
 
     const user = await this.userService.findOneById(req.user.id);
 
-    if (!user) {
-      throw new HttpException('USER_NOT_FOUND', HttpStatus.NOT_FOUND);
-    }
-
     await this.userService.validatePassword(userDTO.password, user);
 
     const encryptedPassword = await this.userService.encryptPassword(
@@ -153,13 +128,66 @@ export class UsersController {
     await this.userService.updatePassword(req.user.id, encryptedPassword);
   }
 
+  @HttpCode(201)
+  @ApiOperation({ summary: 'Send email for user email change' })
+  @ApiBody({ type: EmailChangeDTO })
+  @ApiOkResponse({
+    status: 201,
+    description: 'Send email for email change',
+  })
+  @ApiForbiddenResponse({
+    description: 'The provided email is not valid',
+    status: 400,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMAIL_NOT_VALID',
+      },
+    },
+  })
+  @ApiUnauthorizedResponse({
+    description: 'User token not valid',
+    status: 401,
+    schema: {
+      example: {
+        statusCode: 401,
+        message: 'Unauthorized',
+      },
+    },
+  })
+  @ApiConflictResponse({
+    description: 'The provided email and emailConfirmation are not matching',
+    status: 400,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMAIL_CONFIRMATION_NOT_MATCHING',
+      },
+    },
+  })
+  @ApiConflictResponse({
+    description: 'Can´t change to the same email adress',
+    status: 409,
+    schema: {
+      example: {
+        statusCode: 409,
+        message: 'OLDEMAIL_AND_NEWEMAIL_MUST_BE_DIFFERENT',
+      },
+    },
+  })
+  @ApiConflictResponse({
+    description: 'There is already an email change in progress for that user',
+    status: 409,
+    schema: {
+      example: {
+        statusCode: 409,
+        message: 'EMAIL_CHANGE_ALREADY_IN_PROGRESS',
+      },
+    },
+  })
   @Post('email_change')
   async emailChange(@Req() req, @Body() emailChangeDTO: EmailChangeDTO) {
     const user = await this.userService.findOneById(req.user.id);
-
-    if (!user) {
-      throw new HttpException('USER_NOT_FOUND', HttpStatus.NOT_FOUND);
-    }
 
     if (emailChangeDTO.email === user.email) {
       throw new HttpException(
@@ -183,6 +211,63 @@ export class UsersController {
     this.eventEmitter.emit('email_change.in_progress', emailchange);
   }
 
+  @HttpCode(200)
+  @ApiOperation({ summary: 'Email change confirmation' })
+  @ApiBody({ type: ConfirmEmailchangeDTO })
+  @ApiOkResponse({
+    status: 200,
+    description: 'Email changed',
+  })
+  @ApiForbiddenResponse({
+    description: 'The provided value is not valid',
+    status: 400,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'VALUE_IS_NOT_UUID',
+      },
+    },
+  })
+  @ApiForbiddenResponse({
+    description: 'The provided value is empty',
+    status: 400,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMPTY_REGISTRATION_IDENTIFIER',
+      },
+    },
+  })
+  @ApiUnauthorizedResponse({
+    description: 'User token not valid',
+    status: 401,
+    schema: {
+      example: {
+        statusCode: 401,
+        message: 'Unauthorized',
+      },
+    },
+  })
+  @ApiConflictResponse({
+    description: 'The email change was not found or the uuid has expired',
+    status: 404,
+    schema: {
+      example: {
+        statusCode: 404,
+        message: 'EMAIL_CHANGE_NOT_VALID',
+      },
+    },
+  })
+  @ApiConflictResponse({
+    description: 'The email change was already confirmed',
+    status: 409,
+    schema: {
+      example: {
+        statusCode: 409,
+        message: 'EMAIL_CHANGE_ALREADY_CONFIRMED',
+      },
+    },
+  })
   @Patch('email_change_confirmation')
   async emailchangeConfirmation(@Body() emailChangeDTO: ConfirmEmailchangeDTO) {
     const emailChange: EmailChange =
@@ -190,7 +275,6 @@ export class UsersController {
         emailChangeDTO.emailChangeUUID,
       );
 
-    // aquí puede pasar que el emailChange haya expirado o que no exista
     if (!emailChange) {
       throw new HttpException('EMAIL_CHANGE_NOT_VALID', HttpStatus.NOT_FOUND);
     }
@@ -236,7 +320,7 @@ export class UsersController {
   async remove(@Req() req, @Body() userDTO: UserLoginDTO) {
     const user: User = await this.userService.findOneById(req.user.id);
 
-    if (!user || user.email != userDTO.email) {
+    if (user.email != userDTO.email) {
       throw new HttpException('USER_NOT_FOUND', HttpStatus.NOT_FOUND);
     }
 
