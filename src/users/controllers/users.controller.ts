@@ -67,7 +67,6 @@ export class UsersController {
   })
   @Get()
   async username(@Req() req) {
-    // first verify if user exists (could be soft-deleted)
     const user: User = await this.userService.findOneById(req.user.id);
     return { username: user.email };
   }
@@ -136,16 +135,6 @@ export class UsersController {
     status: 201,
     description: 'Send email for email change',
   })
-  @ApiUnauthorizedResponse({
-    description: 'User token not valid',
-    status: 401,
-    schema: {
-      example: {
-        statusCode: 401,
-        message: 'Unauthorized',
-      },
-    },
-  })
   @ApiForbiddenResponse({
     description: 'The provided email is not valid',
     status: 400,
@@ -156,7 +145,17 @@ export class UsersController {
       },
     },
   })
-  @ApiForbiddenResponse({
+  @ApiUnauthorizedResponse({
+    description: 'User token not valid',
+    status: 401,
+    schema: {
+      example: {
+        statusCode: 401,
+        message: 'Unauthorized',
+      },
+    },
+  })
+  @ApiConflictResponse({
     description: 'The provided email and emailConfirmation are not matching',
     status: 400,
     schema: {
@@ -166,7 +165,7 @@ export class UsersController {
       },
     },
   })
-  @ApiNotFoundResponse({
+  @ApiConflictResponse({
     description: 'Can´t change to the same email adress',
     status: 409,
     schema: {
@@ -219,16 +218,6 @@ export class UsersController {
     status: 200,
     description: 'Email changed',
   })
-  @ApiUnauthorizedResponse({
-    description: 'User token not valid',
-    status: 401,
-    schema: {
-      example: {
-        statusCode: 401,
-        message: 'Unauthorized',
-      },
-    },
-  })
   @ApiForbiddenResponse({
     description: 'The provided value is not valid',
     status: 400,
@@ -246,6 +235,16 @@ export class UsersController {
       example: {
         statusCode: 400,
         message: 'EMPTY_REGISTRATION_IDENTIFIER',
+      },
+    },
+  })
+  @ApiUnauthorizedResponse({
+    description: 'User token not valid',
+    status: 401,
+    schema: {
+      example: {
+        statusCode: 401,
+        message: 'Unauthorized',
       },
     },
   })
