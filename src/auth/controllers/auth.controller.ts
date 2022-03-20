@@ -15,7 +15,6 @@ import { AuthService } from '../services/auth.service';
 import { LocalAuthGuard } from '../guards/local-auth.guard';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { ConfirmRegistrationDTO } from '../models/confirm-registration.dto';
-import { isUUID } from 'class-validator';
 import { UsersService } from 'src/users/services/users.service';
 import {
   ApiBearerAuth,
@@ -89,6 +88,16 @@ export class AuthController {
       },
     },
   })
+  @ApiConflictResponse({
+    description: 'The value provided is not a uuid',
+    status: 400,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'VALUE_IS_NOT_UUID',
+      },
+    },
+  })
   @ApiNotFoundResponse({
     description: 'The value provided is not a valid uuid for that user',
     status: 404,
@@ -96,16 +105,6 @@ export class AuthController {
       example: {
         statusCode: 404,
         message: 'WRONG_REGISTRY_UUID',
-      },
-    },
-  })
-  @ApiConflictResponse({
-    description: 'The value provided is not a uuid',
-    status: 409,
-    schema: {
-      example: {
-        statusCode: 409,
-        message: 'VALUE_IS_NOT_UUID',
       },
     },
   })
@@ -135,10 +134,6 @@ export class AuthController {
   async confirmRegistration(
     @Body() confirmRegistrationDTO: ConfirmRegistrationDTO,
   ) {
-    if (!isUUID(confirmRegistrationDTO.registryUUID)) {
-      throw new HttpException('VALUE_IS_NOT_UUID', HttpStatus.CONFLICT);
-    }
-
     await this.authService.confirmRegistration(
       confirmRegistrationDTO.registryUUID,
     );

@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsUUID } from 'class-validator';
 
-export class ConfirmRegistrationDTO {
+export class ConfirmEmailchangeDTO {
   @ApiProperty({
-    description: 'Registration Identifier',
+    description: 'Email Change Identifier',
     type: String,
   })
   @IsUUID('all', {
@@ -12,5 +12,5 @@ export class ConfirmRegistrationDTO {
   @IsNotEmpty({
     message: 'EMPTY_REGISTRATION_IDENTIFIER',
   })
-  registryUUID: string;
+  emailChangeUUID: string;
 }

@@ -11,6 +11,10 @@ import { User } from '../models/user.entity';
 export class UsersService {
   constructor(@InjectRepository(User) private userRepo: Repository<User>) {}
 
+  async findOneById(id: number): Promise<User | undefined> {
+    return this.userRepo.findOne(id);
+  }
+
   async findOneByEmail(email: string): Promise<User | undefined> {
     return this.userRepo.findOne({ email: email.toLowerCase() });
   }
@@ -45,6 +49,10 @@ export class UsersService {
     if (!isValid) {
       throw new HttpException('WRONG_PASSWORD', HttpStatus.FORBIDDEN);
     }
+  }
+
+  async updatePassword(id: number, password: string) {
+    this.userRepo.update({ id }, { password });
   }
 
   async create(userDTO: UserRegistrationDTO): Promise<User> {

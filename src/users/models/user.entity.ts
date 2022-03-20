@@ -10,6 +10,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { EmailChange } from './email-change.entity';
 
 @Entity('users')
 export class User {
@@ -128,6 +129,9 @@ export class User {
 
   @OneToMany(() => Cart, (cart) => cart.user)
   carts: Cart[];
+
+  @OneToMany(() => EmailChange, (emailChange) => emailChange.user)
+  emailChange: EmailChange[];
 
   @BeforeInsert()
   async lowerCaseAtributes() {
