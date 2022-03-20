@@ -36,6 +36,18 @@ export class MailService {
     });
   }
 
+  async sendPasswordChange(user: User, password: string) {
+    await this.mailerService.sendMail({
+      to: user.email,
+      subject: 'Bienvenido a Librería Punto & Coma! Cambio de Password',
+      template: '../password-forgotten-change.hbs',
+      context: {
+        name: user.firstname,
+        password: password,
+      },
+    });
+  }
+
   @OnEvent('registration.in_progress')
   resendConfirmationEmail(user: User, registryUUID: string) {
     this.sendUserConfirmation(user.email, registryUUID);
@@ -49,5 +61,10 @@ export class MailService {
   @OnEvent('email_change.in_progress')
   sendEmailChangeEmail(emailchange: EmailChange) {
     this.sendEmailChange(emailchange);
+  }
+
+  @OnEvent('password.forgotten')
+  sendPasswordForgottenEmail(user: User, password: string) {
+    this.sendPasswordChange(user, password);
   }
 }

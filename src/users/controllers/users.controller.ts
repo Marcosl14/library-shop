@@ -18,6 +18,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import generator from 'generate-password-ts';
 
 import { EmailChangeDTO } from '../models/email-change.dto';
 import { PasswordChangeDTO } from '../models/password-change.dto';
@@ -30,6 +31,8 @@ import { EmailChangeService } from '../services/email-change.service';
 import { UsersService } from '../services/users.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ConfirmEmailchangeDTO } from '../models/confirm-email-change.dto';
+import { Public } from 'src/auth/decorators/public.decorator';
+import { PasswordForgottenDTO } from '../models/password-forgotten.dto';
 
 @ApiBearerAuth()
 @ApiTags('Users')
@@ -211,7 +214,25 @@ export class UsersController {
       userDTO.newPassword,
     );
 
-    await this.userService.updatePassword(req.user.id, encryptedPassword);
+    await this.userService.updatePassword(user.id, encryptedPassword);
+  }
+
+  @Public()
+  @Patch('password_forgotten')
+  async passwordForgotten(@Body() userDTO: PasswordForgottenDTO) {
+    const user: User = await this.userService.findOneByEmail(userDTO.email);
+
+    const password = generator.generate({
+      length: 10,
+      numbers: true,
+      symbols: true,
+    });
+
+    const encryptedPassword = await this.userService.encryptPassword(password);
+
+    await this.userService.updatePassword(user.id, encryptedPassword);
+
+    this.eventEmitter.emit('password.forgotten', user, password);
   }
 
   @HttpCode(201)
