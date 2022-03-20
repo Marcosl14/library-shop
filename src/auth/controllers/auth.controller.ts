@@ -19,13 +19,10 @@ import { UsersService } from 'src/users/services/users.service';
 import {
   ApiBearerAuth,
   ApiBody,
-  ApiConflictResponse,
-  ApiForbiddenResponse,
-  ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiResponse,
   ApiTags,
-  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
 @ApiBearerAuth()
@@ -44,9 +41,9 @@ export class AuthController {
     status: 201,
     description: 'Created',
   })
-  @ApiConflictResponse({
+  @ApiResponse({
     description: 'The user is allready registered',
-    status: 409,
+    status: 409.01,
     schema: {
       example: {
         statusCode: 409,
@@ -88,19 +85,29 @@ export class AuthController {
       },
     },
   })
-  @ApiConflictResponse({
-    description: 'The value provided is not a uuid',
-    status: 400,
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.01,
     schema: {
-      example: {
+      examples: {
         statusCode: 400,
         message: 'VALUE_IS_NOT_UUID',
       },
     },
   })
-  @ApiNotFoundResponse({
+  @ApiResponse({
+    description: 'The provided value is empty',
+    status: 400.02,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMPTY_REGISTRATION_IDENTIFIER',
+      },
+    },
+  })
+  @ApiResponse({
     description: 'The value provided is not a valid uuid for that user',
-    status: 404,
+    status: 404.01,
     schema: {
       example: {
         statusCode: 404,
@@ -108,9 +115,9 @@ export class AuthController {
       },
     },
   })
-  @ApiConflictResponse({
+  @ApiResponse({
     description: 'The user is already registered',
-    status: 409,
+    status: 409.01,
     schema: {
       example: {
         statusCode: 409,
@@ -118,9 +125,9 @@ export class AuthController {
       },
     },
   })
-  @ApiConflictResponse({
+  @ApiResponse({
     description: 'Token already expired',
-    status: 409,
+    status: 409.02,
     schema: {
       example: {
         statusCode: 409,
@@ -152,9 +159,39 @@ export class AuthController {
       },
     },
   })
-  @ApiUnauthorizedResponse({
+  @ApiResponse({
+    description: 'Password must be a string',
+    status: 400.01,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'PASSWORD_MUST_BE_STRING',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Password must not be empty',
+    status: 400.02,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMPTY_PASSWORD_FIELD',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided email is not valid',
+    status: 400.03,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMAIL_NOT_VALID',
+      },
+    },
+  })
+  @ApiResponse({
     description: 'User token not valid',
-    status: 401,
+    status: 401.01,
     schema: {
       example: {
         statusCode: 401,
@@ -162,9 +199,9 @@ export class AuthController {
       },
     },
   })
-  @ApiForbiddenResponse({
+  @ApiResponse({
     description: 'The provided password is not valid',
-    status: 403,
+    status: 403.01,
     schema: {
       example: {
         statusCode: 403,
@@ -172,9 +209,9 @@ export class AuthController {
       },
     },
   })
-  @ApiNotFoundResponse({
+  @ApiResponse({
     description: 'The provided user was not found',
-    status: 404,
+    status: 404.01,
     schema: {
       example: {
         statusCode: 404,
