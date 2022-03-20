@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid';
 import { UserRegistrationDTO } from 'src/users/models/user-registration.dto';
 import { User } from 'src/users/models/user.entity';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { auth_constants } from '../constants/constants';
+import { globalConstants } from '../../constants/constants';
 import { UserLoginDTO } from 'src/users/models/user-login.dto';
 
 @Injectable()
@@ -81,7 +81,7 @@ export class AuthService {
 
     const updatedAt = await this.usersService.findUpdatedAt(user.id);
 
-    if (Date.now() - updatedAt.getTime() > auth_constants.MILLIS_IN_24_HOURS) {
+    if (Date.now() - updatedAt.getTime() > globalConstants.MILLIS_IN_24_HOURS) {
       throw new HttpException('TOKEN_ALREADY_EXPIRED', HttpStatus.CONFLICT);
     }
 
