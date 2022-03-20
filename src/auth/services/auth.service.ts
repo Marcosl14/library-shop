@@ -16,7 +16,25 @@ export class AuthService {
     private eventEmitter: EventEmitter2,
   ) {}
 
-  async validateUser(email: string): Promise<any> {
+  async validateUserJWT(payload: any): Promise<any> {
+    const user = await this.usersService.findOneById(payload.id);
+
+    if (!user) {
+      throw new HttpException('USER_NOT_FOUND', HttpStatus.NOT_FOUND);
+    }
+
+    if (user.email != payload.email) {
+      throw new HttpException('USER_NOT_FOUND', HttpStatus.NOT_FOUND);
+    }
+
+    if (user.registryUUID != payload.registryUUID) {
+      throw new HttpException('USER_NOT_FOUND', HttpStatus.NOT_FOUND);
+    }
+
+    return user;
+  }
+
+  async validateUserLocal(email: string): Promise<any> {
     const user = await this.usersService.findOneByEmail(email);
 
     if (!user) {
@@ -36,18 +54,16 @@ export class AuthService {
     return await this.usersService.findOneByEmail(userDTO.email);
   }
 
-  createRegistryUUID(): uuid {
-    return uuid();
-  }
-
   async updateRegistryUUID(userDTO: UserRegistrationDTO) {
     const user: User = await this.usersService.findOneByEmail(userDTO.email);
 
-    const registryUUID = this.createRegistryUUID();
-
-    await this.usersService.updateRegistryUUID(user.id, registryUUID);
+    const registryUUID = await this.usersService.updateRegistryUUID(user.id);
 
     this.eventEmitter.emit('registration.update_uuid', user, registryUUID);
+  }
+
+  createRegistryUUID(): uuid {
+    return uuid();
   }
 
   async createUser(userDTO: UserRegistrationDTO) {
@@ -61,7 +77,11 @@ export class AuthService {
   }
 
   async login(user: User) {
-    const payload = { id: user.id, email: user.email };
+    const payload = {
+      id: user.id,
+      email: user.email,
+      registryUUID: user.registryUUID,
+    };
 
     return {
       access_token: this.jwtService.sign(payload),

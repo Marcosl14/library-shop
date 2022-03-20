@@ -27,7 +27,13 @@ export class UsersService {
     this.userRepo.update({ id }, { confirmedRegistration: true });
   }
 
-  async updateRegistryUUID(id: number, registryUUID: uuid): Promise<void> {
+  createRegistryUUID(): uuid {
+    return uuid();
+  }
+
+  async updateRegistryUUID(id: number): Promise<void> {
+    const registryUUID = this.createRegistryUUID();
+
     this.userRepo.update({ id }, { registryUUID });
   }
 
@@ -52,7 +58,13 @@ export class UsersService {
   }
 
   async updatePassword(id: number, password: string) {
-    this.userRepo.update({ id }, { password });
+    const registryUUID = this.createRegistryUUID();
+
+    this.userRepo.update({ id }, { password, registryUUID });
+  }
+
+  async updateEmail(id: number, email: string) {
+    this.userRepo.update({ id }, { email });
   }
 
   async create(userDTO: UserRegistrationDTO): Promise<User> {
