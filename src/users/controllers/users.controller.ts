@@ -64,8 +64,7 @@ export class UsersController {
   })
   @Get()
   async username(@Req() req) {
-    const user: User = await this.userService.findOneById(req.user.id);
-    return { username: user.email };
+    return { username: req.user.email };
   }
 
   @HttpCode(200)
@@ -204,7 +203,7 @@ export class UsersController {
       );
     }
 
-    const user = await this.userService.findOneById(req.user.id);
+    const user: User = req.user;
 
     await this.userService.validatePassword(userDTO.password, user);
 
@@ -274,7 +273,7 @@ export class UsersController {
   })
   @Post('email_change')
   async emailChange(@Req() req, @Body() emailChangeDTO: EmailChangeDTO) {
-    const user = await this.userService.findOneById(req.user.id);
+    const user = req.user;
 
     if (emailChangeDTO.email === user.email) {
       throw new HttpException(
@@ -356,7 +355,10 @@ export class UsersController {
     },
   })
   @Patch('email_change_confirmation')
-  async emailchangeConfirmation(@Body() emailChangeDTO: ConfirmEmailchangeDTO) {
+  async emailchangeConfirmation(
+    @Req() req,
+    @Body() emailChangeDTO: ConfirmEmailchangeDTO,
+  ) {
     const emailChange: EmailChange =
       await this.emailChangeService.isEmailChangeValid(
         emailChangeDTO.emailChangeUUID,
@@ -373,7 +375,9 @@ export class UsersController {
       );
     }
 
-    await this.emailChangeService.updateconfirmation(emailChange.uuid);
+    await this.userService.updateEmail(req.user.id, emailChange.newEmail);
+
+    await this.emailChangeService.updateConfirmation(emailChange.uuid);
   }
 
   @HttpCode(200)
@@ -435,7 +439,7 @@ export class UsersController {
   })
   @Delete()
   async remove(@Req() req, @Body() userDTO: UserLoginDTO) {
-    const user: User = await this.userService.findOneById(req.user.id);
+    const user: User = req.user;
 
     if (user.email != userDTO.email) {
       throw new HttpException('USER_NOT_FOUND', HttpStatus.NOT_FOUND);

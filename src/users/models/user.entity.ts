@@ -87,7 +87,6 @@ export class User {
     name: 'registry_uuid',
     type: 'uuid',
     nullable: false,
-    select: false,
   })
   registryUUID: string;
 
@@ -105,7 +104,6 @@ export class User {
     name: 'created_at',
     type: 'timestamptz',
     default: null,
-    select: false,
   })
   createdAt?: Date;
 
@@ -114,7 +112,6 @@ export class User {
     name: 'updated_at',
     type: 'timestamptz',
     default: null,
-    select: false,
   })
   updatedAt?: Date;
 
@@ -123,7 +120,6 @@ export class User {
     name: 'deleted_at',
     type: 'timestamptz',
     default: null,
-    select: false,
   })
   deletedAt?: Date;
 

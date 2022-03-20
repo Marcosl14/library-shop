@@ -47,7 +47,7 @@ export class EmailChangeService {
     return emailChange;
   }
 
-  async updateconfirmation(uuid: uuid) {
+  async updateConfirmation(uuid: uuid) {
     this.emailChangeRepo.update({ uuid }, { confirmed: true });
   }
 
