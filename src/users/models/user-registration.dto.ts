@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
+  IsPhoneNumber,
   IsString,
   Matches,
   MaxLength,
@@ -43,15 +44,7 @@ export class UserRegistrationDTO {
   })
   lastname: string;
 
-  @IsString({
-    message: 'PHONE_MUST_BE_STRING',
-  })
-  @MinLength(6, {
-    message: 'PHONE_MIN_LENGTH: 6',
-  })
-  @MaxLength(30, {
-    message: 'PHONE_MAX_LENGTH: 30',
-  })
+  @IsPhoneNumber(null, { message: 'INVALID_PHONE_NUMBER' })
   @ApiProperty({
     description: 'User phone number',
     type: String,
@@ -87,7 +80,6 @@ export class UserRegistrationDTO {
     description: 'User Password confirmation',
     type: String,
   })
-  @IsString()
   @StringMatch('password', {
     message: 'PASSWORD_CONFIRMATION_NOT_MATCHING',
   })
