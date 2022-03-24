@@ -50,7 +50,6 @@ export class PasswordChangeDTO {
     description: 'User New Password confirmation',
     type: String,
   })
-  @IsString()
   @StringMatch('newPassword', {
     message: 'PASSWORD_CONFIRMATION_NOT_MATCHING',
   })

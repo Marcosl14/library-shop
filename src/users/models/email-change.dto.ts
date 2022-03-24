@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString } from 'class-validator';
+import { IsEmail } from 'class-validator';
 import { StringMatch } from '../validators/string-match.decorator';
 
 export class EmailChangeDTO {
@@ -19,7 +19,6 @@ export class EmailChangeDTO {
     description: 'User New Email account confirmation',
     type: String,
   })
-  @IsString()
   @StringMatch('email', {
     message: 'EMAIL_CONFIRMATION_NOT_MATCHING',
   })
