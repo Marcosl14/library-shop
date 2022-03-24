@@ -6,6 +6,7 @@ import * as bcrypt from 'bcrypt';
 
 import { UserRegistrationDTO } from '../models/user-registration.dto';
 import { User } from '../models/user.entity';
+import { UserDataDTO } from '../models/user-data.dto';
 
 @Injectable()
 export class UsersService {
@@ -17,6 +18,10 @@ export class UsersService {
 
   async findOneByEmail(email: string): Promise<User | undefined> {
     return this.userRepo.findOne({ email: email.toLowerCase() });
+  }
+
+  async updateUserData(id: number, userData: UserDataDTO) {
+    await this.userRepo.update({ id }, userData);
   }
 
   async findOneByRegistryUUID(registryUUID: string): Promise<User | undefined> {

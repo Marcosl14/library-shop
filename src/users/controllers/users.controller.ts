@@ -33,6 +33,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ConfirmEmailchangeDTO } from '../models/confirm-email-change.dto';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { PasswordForgottenDTO } from '../models/password-forgotten.dto';
+import { UserDataDTO } from '../models/user-data.dto';
 
 @ApiBearerAuth()
 @ApiTags('Users')
@@ -51,7 +52,10 @@ export class UsersController {
     description: 'Get the username',
     schema: {
       example: {
-        username: 'marcos.giordano.l14@googlemail.com',
+        firstname: 'Fernando',
+        lastname: 'Avocado',
+        phone: '351-784231',
+        email: 'fernando.avocado@gmail.com',
       },
     },
   })
@@ -66,8 +70,14 @@ export class UsersController {
     },
   })
   @Get()
-  async username(@Req() req) {
-    return { username: req.user.email };
+  async userData(@Req() req) {
+    const { firstname, lastname, phone, email } = req.user;
+    return { firstname, lastname, phone, email };
+  }
+
+  @Patch('user_data')
+  async changeUserData(@Req() req, @Body() userData: UserDataDTO) {
+    await this.userService.updateUserData(req.user.id, userData);
   }
 
   @HttpCode(200)
