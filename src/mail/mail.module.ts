@@ -1,19 +1,22 @@
 import { join } from 'path';
 import { Module } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { MailService } from './services/mail.service';
+import constants from './constants/env.constants';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true, load: [constants] }),
+
     MailerModule.forRootAsync({
       useFactory: async (config: ConfigService) => ({
         transport: {
           service: 'gmail',
           auth: {
-            user: process.env.MAIL_USER,
-            pass: process.env.MAIL_PASSWORD,
+            user: constants().MAIL_USER,
+            pass: constants().MAIL_PASSWORD,
           },
         },
         defaults: {

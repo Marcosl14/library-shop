@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { globalConstants } from 'src/constants/constants';
+import { globalConstants } from 'src/constants/global.constants';
 import { MoreThan, Repository } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 

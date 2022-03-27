@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid';
 import { UserRegistrationDTO } from 'src/users/models/user-registration.dto';
 import { User } from 'src/users/models/user.entity';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { globalConstants } from '../../constants/constants';
+import { globalConstants } from '../../constants/global.constants';
 import { UserLoginDTO } from 'src/users/models/user-login.dto';
 
 @Injectable()
@@ -20,15 +20,15 @@ export class AuthService {
     const user = await this.usersService.findOneById(payload.id);
 
     if (!user) {
-      throw new HttpException('USER_NOT_FOUND', HttpStatus.NOT_FOUND);
+      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     }
 
     if (user.email != payload.email) {
-      throw new HttpException('USER_NOT_FOUND', HttpStatus.NOT_FOUND);
+      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     }
 
     if (user.registryUUID != payload.registryUUID) {
-      throw new HttpException('USER_NOT_FOUND', HttpStatus.NOT_FOUND);
+      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     }
 
     return user;
