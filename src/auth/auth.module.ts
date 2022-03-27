@@ -10,12 +10,14 @@ import { AuthService } from './services/auth.service';
 import { JwtStrategy } from './strategies/jwt.startegy';
 import { LocalStrategy } from './strategies/local.strategy';
 
+import constants from './constants/env.constants';
+
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true, load: [constants] }),
 
     JwtModule.register({
-      secret: `${process.env.JWT_CONSTANT}`,
+      secret: `${constants().JWT_SECRET}`,
       signOptions: { expiresIn: '60s' },
     }),
 
