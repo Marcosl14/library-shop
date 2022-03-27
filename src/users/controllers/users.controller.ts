@@ -75,8 +75,129 @@ export class UsersController {
     return { firstname, lastname, phone, email };
   }
 
+  @HttpCode(200)
+  @ApiOperation({ summary: 'Change user data' })
+  @ApiBody({ type: UserDataDTO })
+  @ApiOkResponse({
+    status: 200,
+    description: 'Data changed',
+  })
+  @ApiResponse({
+    description: 'Firstname must be a string',
+    status: 400.01,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'FIRSTNAME_MUST_BE_STRING',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Firstname must contain at least 3 characters',
+    status: 400.02,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'FIRSTNAME_MIN_LENGTH: 3',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Firstname must contain less than 16 characters',
+    status: 400.03,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'FIRSTNAME_MAX_LENGTH: 16',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Firstname must be lowercase',
+    status: 400.04,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'FIRST_NAME_MUST_BE_LOWERCASE',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Lastname must be a string',
+    status: 400.05,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'LASTNAME_MUST_BE_STRING',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Lastname must contain at least 3 characters',
+    status: 400.06,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'LASTNAME_MIN_LENGTH: 3',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Lastname must contain less than 16 characters',
+    status: 400.07,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'LASTNAME_MAX_LENGTH: 16',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Lastname must be lowercase',
+    status: 400.08,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'LASTNAME_MUST_BE_LOWERCASE',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Improper phone number format',
+    status: 400.09,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'INVALID_PHONE_NUMBER',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'User token not valid',
+    status: 401.01,
+    schema: {
+      example: {
+        statusCode: 401,
+        message: 'Unauthorized',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'No data sent through the body',
+    status: 409.01,
+    schema: {
+      example: {
+        statusCode: 409,
+        message: 'EMPTY_BODY',
+      },
+    },
+  })
   @Patch('user_data')
   async changeUserData(@Req() req, @Body() userData: UserDataDTO) {
+    if (Object.keys(userData).length === 0) {
+      throw new HttpException('EMPTY_BODY', HttpStatus.CONFLICT);
+    }
+
     await this.userService.updateUserData(req.user.id, userData);
   }
 
@@ -227,6 +348,33 @@ export class UsersController {
     await this.userService.updatePassword(user.id, encryptedPassword);
   }
 
+  @HttpCode(200)
+  @ApiOperation({ summary: 'Change user forgotten password' })
+  @ApiBody({ type: PasswordForgottenDTO })
+  @ApiOkResponse({
+    status: 200,
+    description: 'Email with new password sent',
+  })
+  @ApiResponse({
+    description: 'The provided email is not valid',
+    status: 400.01,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMAIL_NOT_VALID',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'User token not valid',
+    status: 401.01,
+    schema: {
+      example: {
+        statusCode: 401,
+        message: 'Unauthorized',
+      },
+    },
+  })
   @Public()
   @Patch('password_forgotten')
   async passwordForgotten(@Body() userDTO: PasswordForgottenDTO) {

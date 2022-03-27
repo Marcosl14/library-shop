@@ -42,6 +42,196 @@ export class AuthController {
     description: 'Created',
   })
   @ApiResponse({
+    description: 'Firstname must be a string',
+    status: 400.01,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'FIRSTNAME_MUST_BE_STRING',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Firstname must contain at least 3 characters',
+    status: 400.02,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'FIRSTNAME_MIN_LENGTH: 3',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Firstname must contain less than 16 characters',
+    status: 400.03,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'FIRSTNAME_MAX_LENGTH: 16',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Firstname must be lowercase',
+    status: 400.04,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'FIRST_NAME_MUST_BE_LOWERCASE',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Lastname must be a string',
+    status: 400.05,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'LASTNAME_MUST_BE_STRING',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Lastname must contain at least 3 characters',
+    status: 400.06,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'LASTNAME_MIN_LENGTH: 3',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Lastname must contain less than 16 characters',
+    status: 400.07,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'LASTNAME_MAX_LENGTH: 16',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Lastname must be lowercase',
+    status: 400.08,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'LASTNAME_MUST_BE_LOWERCASE',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Improper phone number format',
+    status: 400.09,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'INVALID_PHONE_NUMBER',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Password must be a string',
+    status: 400.1,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'PASSWORD_MUST_BE_STRING',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Password must not be empty',
+    status: 400.11,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMPTY_PASSWORD_FIELD',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Password min lenght',
+    status: 400.12,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'PASSWORD_MIN_LENGTH: 8',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Password max lenght',
+    status: 400.13,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'PASSWORD_MAX_LENGTH: 16',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Password require a number',
+    status: 400.14,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'PASSWORD_MISSING: NUMBER',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Password require an upper case letter',
+    status: 400.15,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'PASSWORD_MISSING: UPPER_CASE_LETTER',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Password require an lower case letter',
+    status: 400.16,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'PASSWORDS_MISSING: LOWER_CASE_LETTER',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Password require a special character',
+    status: 400.17,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'PASSWORDS_MISSING: SPECIAL_CHARACTER',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Password and password confirmation must be identical',
+    status: 400.18,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'PASSWORD_CONFIRMATION_NOT_MATCHING',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided email is not valid',
+    status: 400.2,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMAIL_NOT_VALID',
+      },
+    },
+  })
+  @ApiResponse({
     description: 'The user is allready registered',
     status: 409.01,
     schema: {
