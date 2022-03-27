@@ -3,7 +3,7 @@ import { IsEmail } from 'class-validator';
 
 export class PasswordForgottenDTO {
   @ApiProperty({
-    description: 'User new Email account',
+    description: 'User Email account',
     type: String,
   })
   @IsEmail(

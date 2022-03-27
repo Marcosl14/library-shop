@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsLowercase,
+  IsOptional,
   IsPhoneNumber,
   IsString,
   MaxLength,
@@ -12,6 +13,7 @@ export class UserDataDTO {
     description: 'User firstname',
     type: String,
   })
+  @IsOptional()
   @IsString({
     message: 'FIRSTNAME_MUST_BE_STRING',
   })
@@ -22,14 +24,15 @@ export class UserDataDTO {
     message: 'FIRSTNAME_MAX_LENGTH: 16',
   })
   @IsLowercase({
-    message: 'FIRST_NAME_MUST_BE_LOWERCASE',
+    message: 'FIRSTNAME_MUST_BE_LOWERCASE',
   })
-  firstname: string;
+  firstname?: string;
 
   @ApiProperty({
     description: 'User lastname',
     type: String,
   })
+  @IsOptional()
   @IsString({
     message: 'LASTNAME_MUST_BE_STRING',
   })
@@ -40,14 +43,15 @@ export class UserDataDTO {
     message: 'LASTNAME_MAX_LENGTH: 16',
   })
   @IsLowercase({
-    message: 'LAST_NAME_MUST_BE_LOWERCASE',
+    message: 'LASTNAME_MUST_BE_LOWERCASE',
   })
-  lastname: string;
+  lastname?: string;
 
-  @IsPhoneNumber(null, { message: 'INVALID_PHONE_NUMBER' })
   @ApiProperty({
     description: 'User phone number',
     type: String,
   })
-  phone: string;
+  @IsOptional()
+  @IsPhoneNumber(null, { message: 'INVALID_PHONE_NUMBER' })
+  phone?: string;
 }

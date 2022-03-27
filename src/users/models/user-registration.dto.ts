@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
+  IsLowercase,
+  IsNotEmpty,
   IsPhoneNumber,
   IsString,
   Matches,
@@ -10,6 +12,10 @@ import {
 import { StringMatch } from '../validators/string-match.decorator';
 
 export class UserRegistrationDTO {
+  @ApiProperty({
+    description: 'User firstname',
+    type: String,
+  })
   @IsString({
     message: 'FIRSTNAME_MUST_BE_STRING',
   })
@@ -19,16 +25,15 @@ export class UserRegistrationDTO {
   @MaxLength(16, {
     message: 'FIRSTNAME_MAX_LENGTH: 16',
   })
+  @IsLowercase({
+    message: 'FIRSTNAME_MUST_BE_LOWERCASE',
+  })
+  firstname: string;
+
   @ApiProperty({
     description: 'User lastname',
     type: String,
   })
-  @ApiProperty({
-    description: 'User firstname',
-    type: String,
-  })
-  firstname: string;
-
   @IsString({
     message: 'LASTNAME_MUST_BE_STRING',
   })
@@ -38,21 +43,27 @@ export class UserRegistrationDTO {
   @MaxLength(16, {
     message: 'LASTNAME_MAX_LENGTH: 16',
   })
-  @ApiProperty({
-    description: 'User lastname',
-    type: String,
+  @IsLowercase({
+    message: 'LASTNAME_MUST_BE_LOWERCASE',
   })
   lastname: string;
 
-  @IsPhoneNumber(null, { message: 'INVALID_PHONE_NUMBER' })
   @ApiProperty({
     description: 'User phone number',
     type: String,
   })
+  @IsPhoneNumber(null, { message: 'INVALID_PHONE_NUMBER' })
   phone: string;
 
+  @ApiProperty({
+    description: 'User Password',
+    type: String,
+  })
   @IsString({
     message: 'PASSWORD_MUST_BE_STRING',
+  })
+  @IsNotEmpty({
+    message: 'EMPTY_PASSWORD_FIELD',
   })
   @MinLength(8, {
     message: 'PASSWORD_MIN_LENGTH: 8',
@@ -70,10 +81,6 @@ export class UserRegistrationDTO {
   @Matches(/[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/, {
     message: 'PASSWORDS_MISSING: SPECIAL_CHARACTER',
   })
-  @ApiProperty({
-    description: 'User Password',
-    type: String,
-  })
   password: string;
 
   @ApiProperty({
@@ -85,15 +92,15 @@ export class UserRegistrationDTO {
   })
   passwordConfirmation: string;
 
+  @ApiProperty({
+    description: 'User Email',
+    type: String,
+  })
   @IsEmail(
     {},
     {
       message: 'EMAIL_NOT_VALID',
     },
   )
-  @ApiProperty({
-    description: 'User Email',
-    type: String,
-  })
   email: string;
 }

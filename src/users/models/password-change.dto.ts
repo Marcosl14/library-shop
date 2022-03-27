@@ -21,8 +21,15 @@ export class PasswordChangeDTO {
   })
   password: string;
 
+  @ApiProperty({
+    description: 'User New Password',
+    type: String,
+  })
   @IsString({
     message: 'PASSWORD_MUST_BE_STRING',
+  })
+  @IsNotEmpty({
+    message: 'EMPTY_PASSWORD_FIELD',
   })
   @MinLength(8, {
     message: 'PASSWORD_MIN_LENGTH: 8',
@@ -39,10 +46,6 @@ export class PasswordChangeDTO {
   })
   @Matches(/[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/, {
     message: 'PASSWORDS_MISSING: SPECIAL_CHARACTER',
-  })
-  @ApiProperty({
-    description: 'User New Password',
-    type: String,
   })
   newPassword: string;
 
