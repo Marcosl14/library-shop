@@ -15,6 +15,7 @@ import {
 export class Cart {
   @ApiProperty({
     description: 'Cart id number',
+    readOnly: true,
     type: Number,
   })
   @PrimaryGeneratedColumn({
@@ -23,12 +24,12 @@ export class Cart {
   })
   id: number;
 
-  @ManyToOne(() => User)
-  @JoinColumn({ name: 'user_id' })
   @ApiProperty({
     type: () => User,
     description: 'Owner of the cart',
   })
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'user_id' })
   user: User;
 
   @ApiHideProperty()

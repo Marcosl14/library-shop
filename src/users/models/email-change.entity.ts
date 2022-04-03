@@ -22,9 +22,9 @@ export class EmailChange {
   })
   uuid: uuid;
 
+  @ApiHideProperty()
   @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id' })
-  @ApiHideProperty()
   user: User;
 
   @ApiHideProperty()
