@@ -7,5 +7,5 @@ function isNotEmpty(variableName, variable) {
 }
 
 export default () => ({
-  JWT_SECRET: isNotEmpty('JWT_CONTANT', process.env.JWT_CONSTANT),
+  JWT_SECRET: isNotEmpty('JWT_SECRET', process.env.JWT_SECRET),
 });

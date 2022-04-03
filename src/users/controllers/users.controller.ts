@@ -487,7 +487,7 @@ export class UsersController {
     description: 'The provided value is not valid',
     status: 400.01,
     schema: {
-      examples: {
+      example: {
         statusCode: 400,
         message: 'VALUE_IS_NOT_UUID',
       },

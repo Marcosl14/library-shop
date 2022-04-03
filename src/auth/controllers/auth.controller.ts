@@ -223,7 +223,7 @@ export class AuthController {
   })
   @ApiResponse({
     description: 'The provided email is not valid',
-    status: 400.2,
+    status: 400.19,
     schema: {
       example: {
         statusCode: 400,
@@ -279,7 +279,7 @@ export class AuthController {
     description: 'The provided value is not valid',
     status: 400.01,
     schema: {
-      examples: {
+      example: {
         statusCode: 400,
         message: 'VALUE_IS_NOT_UUID',
       },
