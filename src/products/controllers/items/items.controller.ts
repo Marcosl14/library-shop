@@ -1,9 +1,11 @@
 import {
+  Body,
   Controller,
   DefaultValuePipe,
   Get,
   HttpCode,
   ParseIntPipe,
+  Post,
   Query,
 } from '@nestjs/common';
 import {
@@ -21,6 +23,9 @@ import { ItemsService } from 'src/products/services/items/items.service';
 import { Item } from 'src/products/models/item.entity';
 import { DirectionENUM } from 'src/products/models/direction.enum';
 import { OrderByEnum } from 'src/products/models/order-by.enum';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/auth/models/role.enum';
+import { CreateItemDTO } from 'src/products/models/create-item.dto';
 
 @ApiBearerAuth()
 @ApiTags('Products')
@@ -105,5 +110,27 @@ export class ItemsController {
     // itemsPaginated.items.map((item) => delete item.category);
 
     return itemsPaginated;
+  }
+
+  @HttpCode(200)
+  @ApiOperation({ summary: 'Create a product item' })
+  @ApiOkResponse({
+    status: 200,
+  })
+  @ApiResponse({
+    description: 'User Role Validation failed',
+    status: 403.01,
+    schema: {
+      example: {
+        statusCode: 403,
+        message: 'Forbidden resource',
+      },
+    },
+  })
+  @Roles(Role.Admin)
+  @Post()
+  async createItem(@Body() newItem: CreateItemDTO) {
+    // console.log() ver si valido que el producto ya exista, o no.....
+    await this.itemsService.create(newItem);
   }
 }

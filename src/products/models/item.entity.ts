@@ -45,7 +45,6 @@ export class Item {
     description: 'Item Description',
     maxLength: 1000,
   })
-  @IsOptional()
   @Column({
     name: 'description',
     type: 'character varying',
@@ -59,7 +58,6 @@ export class Item {
     description: 'Item Photo',
     maxLength: 1000,
   })
-  @IsOptional()
   @Column({
     name: 'photo',
     type: 'character varying',
@@ -74,8 +72,6 @@ export class Item {
     description: 'Item Price',
     type: Number,
   })
-  @IsNumber()
-  @Min(0.01)
   @Column({
     name: 'price',
     type: 'float',
@@ -89,14 +85,11 @@ export class Item {
     description: 'Item Discount',
     type: Number,
   })
-  @IsNumber()
-  @Min(0)
-  @Max(1)
   @Column({
     name: 'discount',
     type: 'int',
     nullable: true,
-    default: null,
+    default: 0,
   })
   discount?: number;
 
@@ -113,7 +106,6 @@ export class Item {
     example: 'Pizzini',
     description: 'Brand of item',
   })
-  @IsOptional()
   @Column({
     name: 'brand',
     type: 'character varying',
