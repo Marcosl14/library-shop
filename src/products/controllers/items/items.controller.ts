@@ -29,9 +29,6 @@ export class ItemsController {
   constructor(private itemsService: ItemsService) {}
   @HttpCode(200)
   @ApiOperation({ summary: 'Product items pagination' })
-  @ApiOkResponse({
-    status: 200,
-  })
   @ApiQuery({
     name: 'categoryId',
     type: Number,
@@ -55,6 +52,9 @@ export class ItemsController {
     type: Number,
     required: false,
     description: 'Page number',
+  })
+  @ApiOkResponse({
+    status: 200,
   })
   @ApiResponse({
     description:
