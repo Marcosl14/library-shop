@@ -1,5 +1,8 @@
+import { DirectionENUM } from './direction.enum';
+import { OrderByEnum } from './order-by.enum';
+
 export interface ItemSearchOptions {
   categoryId?: number;
-  orderBy?: string;
-  dir?: 'ASC' | 'DESC';
+  orderBy?: OrderByEnum;
+  direction?: DirectionENUM;
 }

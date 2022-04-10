@@ -85,7 +85,7 @@ export class Item {
 
   @ApiProperty({
     nullable: false,
-    example: 0.25,
+    example: 25,
     description: 'Item Discount',
     type: Number,
   })
@@ -99,6 +99,14 @@ export class Item {
     default: null,
   })
   discount?: number;
+
+  @ApiProperty({
+    nullable: false,
+    example: 155.24,
+    description: 'Item Price With Discount',
+    type: Number,
+  })
+  priceWithDiscount: number;
 
   @ApiProperty({
     type: 'string',
@@ -127,6 +135,7 @@ export class Item {
     name: 'created_at',
     type: 'timestamptz',
     default: null,
+    select: false,
   })
   createdAt?: Date;
 
@@ -135,6 +144,7 @@ export class Item {
     name: 'updated_at',
     type: 'timestamptz',
     default: null,
+    select: false,
   })
   updatedAt?: Date;
 
@@ -143,13 +153,12 @@ export class Item {
     name: 'deleted_at',
     type: 'timestamptz',
     default: null,
+    select: false,
   })
   deletedAt?: Date;
 
-  priceWithDiscount: null;
-
   @AfterLoad()
   getpriceWithDiscount(): number {
-    return this.price * this.discount;
+    return (this.priceWithDiscount = this.price * (1 - this.discount / 100));
   }
 }

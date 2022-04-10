@@ -7,7 +7,7 @@ import {
 } from 'nestjs-typeorm-paginate';
 import { ItemSearchOptions } from 'src/products/models/item-search-options.interface';
 import { Item } from 'src/products/models/item.entity';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 
 @Injectable()
 export class ItemsService {
@@ -20,14 +20,16 @@ export class ItemsService {
     const query = this.itemsRepo.createQueryBuilder('items');
     query.leftJoinAndSelect('items.category', 'category');
 
+    query.where({ deletedAt: IsNull() });
+
     if (searchOptions.categoryId) {
-      query.where('category.id = :categoryId', {
+      query.andWhere('category.id = :categoryId', {
         categoryId: searchOptions.categoryId,
       });
     }
 
     if (searchOptions.orderBy) {
-      query.orderBy(searchOptions.orderBy, searchOptions.dir);
+      query.orderBy(searchOptions.orderBy, searchOptions.direction);
     }
 
     return paginate(query, paginationOptions);
