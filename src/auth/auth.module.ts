@@ -11,6 +11,7 @@ import { JwtStrategy } from './strategies/jwt.startegy';
 import { LocalStrategy } from './strategies/local.strategy';
 
 import constants from './constants/env.constants';
+import { RolesGuard } from './guards/roles.guard';
 
 @Module({
   imports: [
@@ -33,6 +34,10 @@ import constants from './constants/env.constants';
     {
       provide: 'APP_GUARD',
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: 'APP_GUARD',
+      useClass: RolesGuard,
     },
   ],
 })

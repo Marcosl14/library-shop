@@ -34,6 +34,8 @@ import { ConfirmEmailchangeDTO } from '../models/confirm-email-change.dto';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { PasswordForgottenDTO } from '../models/password-forgotten.dto';
 import { UserDataDTO } from '../models/user-data.dto';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/auth/models/role.enum';
 
 @ApiBearerAuth()
 @ApiTags('Users')
