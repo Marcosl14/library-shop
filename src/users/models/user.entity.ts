@@ -131,6 +131,7 @@ export class User {
     length: 20,
     nullable: true,
     select: true,
+    default: Role.User,
   })
   roles: Role[];
 
