@@ -1,4 +1,5 @@
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
+import { Role } from 'src/auth/models/role.enum';
 import { Cart } from 'src/cart/models/cart.entity';
 import {
   BeforeInsert,
@@ -122,6 +123,16 @@ export class User {
     default: null,
   })
   deletedAt?: Date;
+
+  @ApiHideProperty()
+  @Column({
+    name: 'roles',
+    type: 'character varying',
+    length: 20,
+    nullable: true,
+    select: true,
+  })
+  roles: Role[];
 
   @OneToMany(() => Cart, (cart) => cart.user)
   carts: Cart[];
