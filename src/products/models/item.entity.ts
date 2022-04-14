@@ -74,20 +74,24 @@ export class Item {
   })
   @Column({
     name: 'price',
-    type: 'float',
+    type: 'decimal',
+    precision: 13,
+    scale: 2,
     nullable: false,
   })
   price: number;
 
   @ApiProperty({
     nullable: false,
-    example: 25,
+    example: 25.5,
     description: 'Item Discount',
     type: Number,
   })
   @Column({
     name: 'discount',
-    type: 'int',
+    type: 'decimal',
+    precision: 13,
+    scale: 2,
     nullable: true,
     default: 0,
   })
@@ -150,8 +154,16 @@ export class Item {
   deletedAt?: Date;
 
   @AfterLoad()
-  getpriceWithDiscount(): number {
-    return (this.priceWithDiscount = this.price * (1 - this.discount / 100));
+  getpriceWithDiscount() {
+    this.priceWithDiscount = parseFloat(
+      (this.price * (1 - this.discount / 100)).toFixed(2),
+    );
+  }
+
+  @AfterLoad()
+  converttoNumbers() {
+    this.price = parseFloat(this.price.toString());
+    this.discount = parseFloat(this.discount.toString());
   }
 
   @BeforeInsert()
