@@ -286,42 +286,42 @@ export class ItemsController {
     },
   })
   @ApiResponse({
-    description: 'The provided value is not valid',
+    description: 'Title must contain less than 16 characters',
     status: 400.13,
     schema: {
       example: {
         statusCode: 400,
-        message: 'TITLE_MAX_LENGTH',
+        message: 'TITLE_MAX_LENGTH: 100',
       },
     },
   })
   @ApiResponse({
-    description: 'The provided value is not valid',
+    description: 'Description must contain less than 16 characters',
     status: 400.14,
     schema: {
       example: {
         statusCode: 400,
-        message: 'DESCRIPTION_MAX_LENGTH',
+        message: 'DESCRIPTION_MAX_LENGTH: 1000',
       },
     },
   })
   @ApiResponse({
-    description: 'The provided value is not valid',
+    description: 'Photo url must contain less than 16 characters',
     status: 400.15,
     schema: {
       example: {
         statusCode: 400,
-        message: 'PHOTO_MAX_LENGTH',
+        message: 'PHOTO_MAX_LENGTH: 100',
       },
     },
   })
   @ApiResponse({
-    description: 'The provided value is not valid',
+    description: 'Brand name must contain less than 16 characters',
     status: 400.16,
     schema: {
       example: {
         statusCode: 400,
-        message: 'BRAND_MAX_LENGTH',
+        message: 'BRAND_MAX_LENGTH: 30',
       },
     },
   })
@@ -500,7 +500,7 @@ export class ItemsController {
     schema: {
       example: {
         statusCode: 400,
-        message: 'TITLE_MAX_LENGTH',
+        message: 'TITLE_MAX_LENGTH: 100',
       },
     },
   })
@@ -510,7 +510,7 @@ export class ItemsController {
     schema: {
       example: {
         statusCode: 400,
-        message: 'DESCRIPTION_MAX_LENGTH',
+        message: 'DESCRIPTION_MAX_LENGTH: 1000',
       },
     },
   })
@@ -520,7 +520,7 @@ export class ItemsController {
     schema: {
       example: {
         statusCode: 400,
-        message: 'PHOTO_MAX_LENGTH',
+        message: 'PHOTO_MAX_LENGTH: 100',
       },
     },
   })
@@ -530,7 +530,7 @@ export class ItemsController {
     schema: {
       example: {
         statusCode: 400,
-        message: 'BRAND_MAX_LENGTH',
+        message: 'BRAND_MAX_LENGTH: 30',
       },
     },
   })
@@ -588,7 +588,7 @@ export class ItemsController {
   @Patch(':id')
   async updateItem(@Param('id') id: number, @Body() itemDto: CreateItemDTO) {
     if (isNaN(id)) {
-      throw new HttpException('ID_MUST_BE_NUMBER', HttpStatus.NOT_FOUND);
+      throw new HttpException('ID_MUST_BE_NUMBER', HttpStatus.CONFLICT);
     }
     await this.itemsService.update(id, itemDto);
   }
@@ -618,7 +618,7 @@ export class ItemsController {
   @Delete(':id')
   async deleteItem(@Param('id') id: number) {
     if (isNaN(id)) {
-      throw new HttpException('ID_MUST_BE_NUMBER', HttpStatus.NOT_FOUND);
+      throw new HttpException('ID_MUST_BE_NUMBER', HttpStatus.CONFLICT);
     }
     await this.itemsService.delete(id);
   }

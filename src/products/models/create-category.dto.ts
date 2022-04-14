@@ -15,8 +15,8 @@ export class CreateCategoryDTO {
   @IsNotEmpty({
     message: 'EMPTY_NAME_FIELD',
   })
-  @MaxLength(100, {
-    message: 'NAME_MAX_LENGTH',
+  @MaxLength(30, {
+    message: 'NAME_MAX_LENGTH: 30',
   })
   name: string;
 }

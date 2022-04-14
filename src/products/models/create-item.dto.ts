@@ -10,7 +10,6 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
-import { BeforeInsert } from 'typeorm';
 
 export class CreateItemDTO {
   @ApiProperty({
@@ -27,7 +26,7 @@ export class CreateItemDTO {
     message: 'EMPTY_TITLE_FIELD',
   })
   @MaxLength(100, {
-    message: 'TITLE_MAX_LENGTH',
+    message: 'TITLE_MAX_LENGTH: 100',
   })
   title: string;
 
@@ -42,7 +41,7 @@ export class CreateItemDTO {
     message: 'DESCRIPTION_MUST_BE_STRING',
   })
   @MaxLength(1000, {
-    message: 'DESCRIPTION_MAX_LENGTH',
+    message: 'DESCRIPTION_MAX_LENGTH: 1000',
   })
   description?: string;
 
@@ -55,7 +54,7 @@ export class CreateItemDTO {
   @IsOptional()
   @IsUrl({ message: 'PHOTO_MUST_BE_A_URL_ADRESS' })
   @MaxLength(100, {
-    message: 'PHOTO_MAX_LENGTH',
+    message: 'PHOTO_MAX_LENGTH: 100',
   })
   photo?: string;
 
@@ -91,7 +90,7 @@ export class CreateItemDTO {
     message: 'BRAND_MUST_BE_STRING',
   })
   @MaxLength(30, {
-    message: 'BRAND_MAX_LENGTH',
+    message: 'BRAND_MAX_LENGTH: 30',
   })
   brand?: string;
 
