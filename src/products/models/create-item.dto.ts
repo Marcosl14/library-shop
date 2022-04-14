@@ -1,12 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsInt,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
+  IsUrl,
   Max,
   Min,
 } from 'class-validator';
+import { BeforeInsert } from 'typeorm';
 
 export class CreateItemDTO {
   @ApiProperty({
@@ -14,27 +17,36 @@ export class CreateItemDTO {
     description: 'Item title',
     nullable: false,
     maxLength: 100,
+    type: String,
   })
-  @IsString()
-  @IsNotEmpty()
+  @IsString({
+    message: 'TITLE_MUST_BE_STRING',
+  })
+  @IsNotEmpty({
+    message: 'EMPTY_TITLE_FIELD',
+  })
   title: string;
 
   @ApiProperty({
     example: 'Lorem ipsum dolor sit amet, consectetuer adipiscin',
     description: 'Item Description',
     maxLength: 1000,
+    type: String,
   })
   @IsOptional()
-  @IsString()
+  @IsString({
+    message: 'DESCRIPTION_MUST_BE_STRING',
+  })
   description?: string;
 
   @ApiProperty({
     example: 'www.mypicture.com/347378jhdf32974987342_2347832756',
     description: 'Item Photo',
     maxLength: 1000,
+    type: 'url',
   })
   @IsOptional()
-  @IsString()
+  @IsUrl({ message: 'PHOTO_MUST_BE_A_URL_ADRESS' })
   photo?: string;
 
   @ApiProperty({
@@ -43,8 +55,8 @@ export class CreateItemDTO {
     description: 'Item Price',
     type: Number,
   })
-  @IsNumber()
-  @Min(0.01)
+  @IsNumber({}, { message: 'PRICE_MUST_BE_NUMBER' })
+  @Min(0.01, { message: 'PRICE_VALUE_MUST_BE_HIGHER_THAN_0.01' })
   price: number;
 
   @ApiProperty({
@@ -54,24 +66,35 @@ export class CreateItemDTO {
     type: Number,
   })
   @IsOptional()
-  @IsNumber()
-  @Min(0)
-  @Max(100)
+  @IsNumber({}, { message: 'DISCOUNT_MUST_BE_NUMBER' })
+  @Min(0.01, { message: 'DISCOUNT_VALUE_MUST_BE_HIGHER_THAN_0' })
+  @Max(100, { message: 'DISCOUNT_VALUE_MUST_BE_LOWER_THAN_100' })
   discount?: number;
 
   @ApiProperty({
-    type: 'string',
+    type: String,
     example: 'Pizzini',
     description: 'Brand of item',
   })
   @IsOptional()
+  @IsString({
+    message: 'BRAND_MUST_BE_STRING',
+  })
   brand?: string;
 
   @ApiProperty({
-    type: 'number',
+    type: Number,
     description: 'Item Category Id',
   })
-  @IsNumber()
-  @IsNotEmpty()
-  categoryId: number;
+  @IsInt({ message: 'CATEGORY_ID_MUST_BE_INTEGER' })
+  @IsNotEmpty({
+    message: 'EMPTY_CATEGORY_FIELD',
+  })
+  category_id: number;
+
+  @BeforeInsert()
+  async lowerCaseAtributes() {
+    this.title = this.title.toLowerCase();
+    this.brand = this.brand.toLowerCase();
+  }
 }

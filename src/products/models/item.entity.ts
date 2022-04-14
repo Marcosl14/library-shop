@@ -10,7 +10,6 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsOptional, Max, Min } from 'class-validator';
 import { Category } from './categories.entity';
 
 @Entity('items')

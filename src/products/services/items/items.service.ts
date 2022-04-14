@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { instanceToPlain, plainToClass } from 'class-transformer';
 import {
   IPaginationOptions,
   paginate,
@@ -40,8 +41,12 @@ export class ItemsService {
     return paginate(query, paginationOptions);
   }
 
+  async getOneItem(id: number) {
+    return this.itemsRepo.findOne(id);
+  }
+
   async create(itemDto: CreateItemDTO) {
-    const category = await this.categoryRepo.findOne(itemDto.categoryId);
+    const category = await this.categoryRepo.findOne(itemDto.category_id);
 
     if (!category) {
       throw new HttpException('CATEGORY_NOT_FOUND', HttpStatus.NOT_FOUND);
@@ -52,5 +57,32 @@ export class ItemsService {
     newItem.category = category;
 
     await this.itemsRepo.save(newItem);
+  }
+
+  async update(id: number, itemDto: CreateItemDTO) {
+    let item = await this.itemsRepo.findOne(id);
+
+    if (!item) {
+      throw new HttpException('ITEM_NOT_FOUND', HttpStatus.NOT_FOUND);
+    }
+
+    const category = await this.categoryRepo.findOne(itemDto.category_id);
+
+    if (!category) {
+      throw new HttpException('CATEGORY_NOT_FOUND', HttpStatus.NOT_FOUND);
+    }
+
+    delete itemDto.category_id;
+
+    const plainDto = instanceToPlain(itemDto);
+    item = plainToClass(Item, plainDto);
+
+    item.category = category;
+
+    await this.itemsRepo.update(id, item);
+  }
+
+  async delete(id: number) {
+    await this.itemsRepo.softDelete(id);
   }
 }
