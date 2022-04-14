@@ -65,6 +65,46 @@ export class ItemsController {
   @ApiOkResponse({
     status: 200,
   })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.01,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'CATEGORY_ID_MUST_BE_INTEGER',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.02,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'ORDER_BY_NOT_VALID',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.03,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'DIRECTION_NOT_VALID',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.04,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'PAGE_MUST_BE_INTEGER',
+      },
+    },
+  })
   @Public()
   @Get()
   async getAllItems(@Query() getItemsQuery: GetItemsQueryDTO) {
