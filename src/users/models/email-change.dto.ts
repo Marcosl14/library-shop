@@ -1,11 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail } from 'class-validator';
+import { IsEmail, MaxLength } from 'class-validator';
 import { StringMatch } from '../validators/string-match.decorator';
 
 export class EmailChangeDTO {
   @ApiProperty({
     description: 'User new Email account',
     type: String,
+  })
+  @MaxLength(100, {
+    message: 'EMAIL_MAX_LENGTH: 100',
   })
   @IsEmail(
     {},

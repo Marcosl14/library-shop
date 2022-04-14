@@ -17,6 +17,7 @@ import { EmailChange } from './email-change.entity';
 export class User {
   @ApiProperty({
     description: 'User id number',
+    readOnly: true,
     type: Number,
   })
   @PrimaryGeneratedColumn({
