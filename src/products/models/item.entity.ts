@@ -118,7 +118,7 @@ export class Item {
     type: Category,
     description: 'Item Category',
   })
-  @ManyToOne(() => Category, { eager: true, nullable: false })
+  @ManyToOne(() => Category, { eager: true, nullable: true })
   @JoinColumn({ name: 'category_id' })
   category: Category;
 

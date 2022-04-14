@@ -45,7 +45,7 @@ export class ItemsService {
     return this.itemsRepo.findOne(id);
   }
 
-  async create(itemDto: CreateItemDTO) {
+  async create(itemDto: CreateItemDTO): Promise<void> {
     const category = await this.categoryRepo.findOne(itemDto.category_id);
 
     if (!category) {
@@ -59,7 +59,7 @@ export class ItemsService {
     await this.itemsRepo.save(newItem);
   }
 
-  async update(id: number, itemDto: CreateItemDTO) {
+  async update(id: number, itemDto: CreateItemDTO): Promise<void> {
     let item = await this.itemsRepo.findOne(id);
 
     if (!item) {
@@ -82,7 +82,13 @@ export class ItemsService {
     await this.itemsRepo.update(id, item);
   }
 
-  async delete(id: number) {
+  async delete(id: number): Promise<void> {
+    const item = await this.itemsRepo.findOne(id);
+
+    if (!item) {
+      throw new HttpException('ITEM_NOT_FOUND', HttpStatus.NOT_FOUND);
+    }
+
     await this.itemsRepo.softDelete(id);
   }
 }
