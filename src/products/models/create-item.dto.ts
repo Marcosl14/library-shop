@@ -104,10 +104,4 @@ export class CreateItemDTO {
     message: 'EMPTY_CATEGORY_FIELD',
   })
   category_id: number;
-
-  @BeforeInsert()
-  async lowerCaseAtributes() {
-    this.title = this.title.toLowerCase();
-    this.brand = this.brand.toLowerCase();
-  }
 }

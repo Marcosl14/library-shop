@@ -8,6 +8,7 @@ import {
   AfterLoad,
   JoinColumn,
   ManyToOne,
+  BeforeInsert,
 } from 'typeorm';
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { Category } from './categories.entity';
@@ -151,5 +152,11 @@ export class Item {
   @AfterLoad()
   getpriceWithDiscount(): number {
     return (this.priceWithDiscount = this.price * (1 - this.discount / 100));
+  }
+
+  @BeforeInsert()
+  async lowerCaseAtributes() {
+    this.title = this.title.toLowerCase();
+    this.brand = this.brand.toLowerCase();
   }
 }
