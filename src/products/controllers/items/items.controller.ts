@@ -32,10 +32,11 @@ import { CreateItemDTO } from 'src/products/models/create-item.dto';
 import { GetItemsQueryDTO } from 'src/products/models/get-items-query.dto';
 
 @ApiBearerAuth()
-@ApiTags('Products')
+@ApiTags('Product-Items')
 @Controller('items')
 export class ItemsController {
   constructor(private itemsService: ItemsService) {}
+
   @HttpCode(200)
   @ApiOperation({ summary: 'Product items pagination' })
   @ApiQuery({
@@ -356,9 +357,9 @@ export class ItemsController {
   })
   @Roles(Role.Admin)
   @Post()
-  async createItem(@Body() newItem: CreateItemDTO) {
+  async createItem(@Body() itemDto: CreateItemDTO) {
     // console.log() ver si valido que el producto ya exista, o no.....
-    await this.itemsService.create(newItem);
+    await this.itemsService.create(itemDto);
   }
 
   @HttpCode(200)
@@ -585,11 +586,11 @@ export class ItemsController {
   })
   @Roles(Role.Admin)
   @Patch(':id')
-  async updateItem(@Param('id') id: number, @Body() newItem: CreateItemDTO) {
+  async updateItem(@Param('id') id: number, @Body() itemDto: CreateItemDTO) {
     if (isNaN(id)) {
       throw new HttpException('ID_MUST_BE_NUMBER', HttpStatus.NOT_FOUND);
     }
-    await this.itemsService.update(id, newItem);
+    await this.itemsService.update(id, itemDto);
   }
 
   @HttpCode(200)
