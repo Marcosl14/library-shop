@@ -164,6 +164,11 @@ export class ItemsController {
   @ApiBody({ type: CreateItemDTO })
   @ApiOkResponse({
     status: 200,
+    schema: {
+      example: {
+        id: 4000,
+      },
+    },
   })
   @ApiResponse({
     description: 'The provided value is not valid',
@@ -359,7 +364,7 @@ export class ItemsController {
   @Post()
   async createItem(@Body() itemDto: CreateItemDTO) {
     // console.log() ver si valido que el producto ya exista, o no.....
-    await this.itemsService.create(itemDto);
+    return { id: await this.itemsService.create(itemDto) };
   }
 
   @HttpCode(200)

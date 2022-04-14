@@ -45,7 +45,7 @@ export class ItemsService {
     return this.itemsRepo.findOne(id);
   }
 
-  async create(itemDto: CreateItemDTO): Promise<void> {
+  async create(itemDto: CreateItemDTO): Promise<number> {
     const category = await this.categoryRepo.findOne(itemDto.category_id);
 
     if (!category) {
@@ -57,6 +57,8 @@ export class ItemsService {
     newItem.category = category;
 
     await this.itemsRepo.save(newItem);
+
+    return newItem.id;
   }
 
   async update(id: number, itemDto: CreateItemDTO): Promise<void> {
