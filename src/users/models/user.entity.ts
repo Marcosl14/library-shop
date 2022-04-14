@@ -144,8 +144,12 @@ export class User {
 
   @BeforeInsert()
   async lowerCaseAtributes() {
-    this.firstname = this.firstname.toLowerCase();
-    this.lastname = this.lastname.toLowerCase();
-    this.email = this.email.toLowerCase();
+    this.firstname = this.firstname
+      ? this.firstname.toLowerCase()
+      : this.firstname;
+
+    this.lastname = this.lastname ? this.lastname.toLowerCase() : this.lastname;
+
+    this.email = this.email ? this.email.toLowerCase() : this.email;
   }
 }

@@ -156,7 +156,7 @@ export class Item {
 
   @BeforeInsert()
   async lowerCaseAtributes() {
-    this.title = this.title.toLowerCase();
-    this.brand = this.brand.toLowerCase();
+    this.title = this.title ? this.title.toLowerCase() : this.title;
+    this.brand = this.brand ? this.title.toLowerCase() : this.brand;
   }
 }
