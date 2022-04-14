@@ -232,6 +232,16 @@ export class AuthController {
     },
   })
   @ApiResponse({
+    description: 'Email must contain less than 100 characters',
+    status: 400.2,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMAIL_MAX_LENGTH: 100',
+      },
+    },
+  })
+  @ApiResponse({
     description: 'The user is allready registered',
     status: 409.01,
     schema: {

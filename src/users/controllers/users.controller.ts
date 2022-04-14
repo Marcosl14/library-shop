@@ -423,6 +423,16 @@ export class UsersController {
     },
   })
   @ApiResponse({
+    description: 'Email must contain less than 100 characters',
+    status: 400.03,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMAIL_MAX_LENGTH: 100',
+      },
+    },
+  })
+  @ApiResponse({
     description: 'User token not valid',
     status: 401.01,
     schema: {

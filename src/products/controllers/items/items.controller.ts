@@ -70,8 +70,6 @@ export class ItemsController {
   async getAllItems(@Query() getItemsQuery: GetItemsQueryDTO) {
     const limit = 24;
 
-    console.log(getItemsQuery);
-
     const itemsPaginated = await this.itemsService.getItems(
       {
         categoryId: getItemsQuery.categoryId,
@@ -247,6 +245,46 @@ export class ItemsController {
     },
   })
   @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.13,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'TITLE_MAX_LENGTH',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.14,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'DESCRIPTION_MAX_LENGTH',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.15,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'PHOTO_MAX_LENGTH',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.16,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'BRAND_MAX_LENGTH',
+      },
+    },
+  })
+  @ApiResponse({
     description: 'User token not valid',
     status: 401.01,
     schema: {
@@ -412,6 +450,46 @@ export class ItemsController {
       example: {
         statusCode: 400,
         message: 'EMPTY_CATEGORY_FIELD',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.13,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'TITLE_MAX_LENGTH',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.14,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'DESCRIPTION_MAX_LENGTH',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.15,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'PHOTO_MAX_LENGTH',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.16,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'BRAND_MAX_LENGTH',
       },
     },
   })

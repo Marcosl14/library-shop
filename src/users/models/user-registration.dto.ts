@@ -96,6 +96,9 @@ export class UserRegistrationDTO {
     description: 'User Email',
     type: String,
   })
+  @MaxLength(100, {
+    message: 'EMAIL_MAX_LENGTH: 100',
+  })
   @IsEmail(
     {},
     {
