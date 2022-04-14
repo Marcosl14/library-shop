@@ -3,7 +3,7 @@ import { IsEnum, IsInt, IsOptional } from 'class-validator';
 import { DirectionENUM } from './direction.enum';
 import { OrderByEnum } from './order-by.enum';
 
-export class GetItemsQuery {
+export class GetItemsQueryDTO {
   @IsInt({ message: 'CATEGORY_ID_MUST_BE_INTEGER' })
   @IsOptional()
   @Type(() => Number)

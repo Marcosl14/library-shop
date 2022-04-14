@@ -29,7 +29,7 @@ import { OrderByEnum } from 'src/products/models/order-by.enum';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/auth/models/role.enum';
 import { CreateItemDTO } from 'src/products/models/create-item.dto';
-import { GetItemsQuery } from 'src/products/models/get-items.query';
+import { GetItemsQueryDTO } from 'src/products/models/get-items-query.dto';
 
 @ApiBearerAuth()
 @ApiTags('Products')
@@ -67,7 +67,7 @@ export class ItemsController {
   })
   @Public()
   @Get()
-  async getAllItems(@Query() getItemsQuery: GetItemsQuery) {
+  async getAllItems(@Query() getItemsQuery: GetItemsQueryDTO) {
     const limit = 24;
 
     console.log(getItemsQuery);
