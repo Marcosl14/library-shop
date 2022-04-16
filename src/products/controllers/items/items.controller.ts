@@ -223,9 +223,10 @@ export class ItemsController {
   @ApiBody({ type: CreateItemDTO })
   @ApiOkResponse({
     status: 200,
+    description: 'Return the created item id',
     schema: {
       example: {
-        id: 4000,
+        id: 2,
       },
     },
   })
@@ -350,7 +351,7 @@ export class ItemsController {
     },
   })
   @ApiResponse({
-    description: 'Title must contain less than 16 characters',
+    description: 'Title must contain less than 100 characters',
     status: 400.13,
     schema: {
       example: {
@@ -360,7 +361,7 @@ export class ItemsController {
     },
   })
   @ApiResponse({
-    description: 'Description must contain less than 16 characters',
+    description: 'Description must contain less than 1000 characters',
     status: 400.14,
     schema: {
       example: {
@@ -370,7 +371,7 @@ export class ItemsController {
     },
   })
   @ApiResponse({
-    description: 'Photo url must contain less than 16 characters',
+    description: 'Photo url must contain less than 100 characters',
     status: 400.15,
     schema: {
       example: {
@@ -380,7 +381,7 @@ export class ItemsController {
     },
   })
   @ApiResponse({
-    description: 'Brand name must contain less than 16 characters',
+    description: 'Brand name must contain less than 30 characters',
     status: 400.16,
     schema: {
       example: {
