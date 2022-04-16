@@ -4,6 +4,7 @@ import { instanceToPlain, plainToClass } from 'class-transformer';
 import { CreateOfferDTO } from 'src/products/models/create-offer.dto';
 import { Item } from 'src/products/models/item.entity';
 import { Offer } from 'src/products/models/offer.entity';
+import { UpdateOfferDTO } from 'src/products/models/update-offer.dto';
 import { In, Repository } from 'typeorm';
 
 @Injectable()
@@ -44,5 +45,42 @@ export class OffersService {
     await this.offersRepo.save(newOffer);
 
     return newOffer.id;
+  }
+
+  async update(id: number, offerDto: UpdateOfferDTO): Promise<void> {
+    const offer = await this.offersRepo.findOne(id);
+
+    if (!offer) {
+      throw new HttpException('OFFER_NOT_FOUND', HttpStatus.NOT_FOUND);
+    }
+
+    const items = await this.itemsRepo.find({ id: In(offerDto.items) });
+
+    const ids = items.map((item) => Number(item.id));
+
+    offerDto.items.forEach((id) => {
+      if (!ids.includes(id)) {
+        throw new HttpException(
+          `ITEM_ID_NOT_FOUND: ${id}`,
+          HttpStatus.NOT_FOUND,
+        );
+      }
+    });
+
+    Object.keys(offer).forEach((key) => (offer[key] = offerDto[key]));
+    offer.id = id;
+    offer.items = items;
+
+    await this.offersRepo.save(offer);
+  }
+
+  async delete(id: number): Promise<void> {
+    const offer = await this.offersRepo.findOne(id);
+
+    if (!offer) {
+      throw new HttpException('OFFER_NOT_FOUND', HttpStatus.NOT_FOUND);
+    }
+
+    await this.offersRepo.softDelete(id);
   }
 }
