@@ -40,16 +40,13 @@ export class CategoriesController {
   })
   @Public()
   @Get()
-  async getAllItems() {
+  async getAllCategories() {
     return await this.categoriesService.getCategories();
   }
 
   @HttpCode(200)
   @ApiOperation({ summary: 'Create a product category' })
-  @ApiOkResponse({
-    status: 200,
-    type: Category,
-  })
+  @ApiOkResponse({ status: 200 })
   @ApiResponse({
     description: 'The provided value is not valid',
     status: 400.01,
@@ -82,15 +79,13 @@ export class CategoriesController {
   })
   @Roles(Role.Admin)
   @Post()
-  async createItem(@Body() categoryDto: CreateCategoryDTO) {
+  async createCategory(@Body() categoryDto: CreateCategoryDTO) {
     await this.categoriesService.createCategory(categoryDto);
   }
 
   @HttpCode(200)
   @ApiOperation({ summary: 'Update a product category' })
-  @ApiOkResponse({
-    status: 200,
-  })
+  @ApiOkResponse({ status: 200 })
   @ApiResponse({
     description: 'The provided value is not valid',
     status: 400.01,
@@ -143,7 +138,7 @@ export class CategoriesController {
   })
   @Roles(Role.Admin)
   @Patch(':id')
-  async updateItem(
+  async updateCategory(
     @Param('id') id: number,
     @Body() categoryDto: CreateCategoryDTO,
   ) {
@@ -181,7 +176,7 @@ export class CategoriesController {
   })
   @Roles(Role.Admin)
   @Delete(':id')
-  async deleteItem(@Param('id') id: number) {
+  async deleteCategory(@Param('id') id: number) {
     if (isNaN(id)) {
       throw new HttpException('ID_MUST_BE_NUMBER', HttpStatus.CONFLICT);
     }
