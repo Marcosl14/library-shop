@@ -391,6 +391,26 @@ export class ItemsController {
     },
   })
   @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.17,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMPTY_DESCRITPION_FIELD',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.18,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMPTY_BRAND_FIELD',
+      },
+    },
+  })
+  @ApiResponse({
     description: 'User token not valid',
     status: 401.01,
     schema: {
@@ -596,6 +616,26 @@ export class ItemsController {
       example: {
         statusCode: 400,
         message: 'BRAND_MAX_LENGTH: 30',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.17,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMPTY_DESCRITPION_FIELD',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.18,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMPTY_BRAND_FIELD',
       },
     },
   })

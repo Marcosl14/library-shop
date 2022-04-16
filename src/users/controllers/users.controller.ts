@@ -173,6 +173,26 @@ export class UsersController {
     },
   })
   @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.1,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMPTY_FIRSTNAME_FIELD',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.11,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMPTY_LASTNAME_FIELD',
+      },
+    },
+  })
+  @ApiResponse({
     description: 'User token not valid',
     status: 401.01,
     schema: {

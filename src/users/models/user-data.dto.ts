@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsLowercase,
+  IsNotEmpty,
   IsOptional,
   IsPhoneNumber,
   IsString,
@@ -16,6 +17,9 @@ export class UserDataDTO {
   @IsOptional()
   @IsString({
     message: 'FIRSTNAME_MUST_BE_STRING',
+  })
+  @IsNotEmpty({
+    message: 'EMPTY_FIRSTNAME_FIELD',
   })
   @MinLength(3, {
     message: 'FIRSTNAME_MIN_LENGTH: 3',
@@ -35,6 +39,9 @@ export class UserDataDTO {
   @IsOptional()
   @IsString({
     message: 'LASTNAME_MUST_BE_STRING',
+  })
+  @IsNotEmpty({
+    message: 'EMPTY_LASTNAME_FIELD',
   })
   @MinLength(3, {
     message: 'LASTNAME_MIN_LENGTH: 3',

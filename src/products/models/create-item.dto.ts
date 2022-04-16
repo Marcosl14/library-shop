@@ -40,6 +40,9 @@ export class CreateItemDTO {
   @IsString({
     message: 'DESCRIPTION_MUST_BE_STRING',
   })
+  @IsNotEmpty({
+    message: 'EMPTY_DESCRIPTION_FIELD',
+  })
   @MaxLength(1000, {
     message: 'DESCRIPTION_MAX_LENGTH: 1000',
   })
@@ -88,6 +91,9 @@ export class CreateItemDTO {
   @IsOptional()
   @IsString({
     message: 'BRAND_MUST_BE_STRING',
+  })
+  @IsNotEmpty({
+    message: 'EMPTY_BRAND_FIELD',
   })
   @MaxLength(30, {
     message: 'BRAND_MAX_LENGTH: 30',
