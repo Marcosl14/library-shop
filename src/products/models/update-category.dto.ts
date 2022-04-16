@@ -8,6 +8,7 @@ export class UpdateCategoryDTO {
     nullable: false,
     maxLength: 100,
     type: String,
+    required: false,
   })
   @IsOptional()
   @IsString({
