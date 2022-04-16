@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from 'src/products/models/categories.entity';
 import { CreateCategoryDTO } from 'src/products/models/create-category.dto';
+import { UpdateCategoryDTO } from 'src/products/models/update-category.dto';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -22,7 +23,7 @@ export class CategoriesService {
 
   async updateCategory(
     id: number,
-    categoryDto: CreateCategoryDTO,
+    categoryDto: UpdateCategoryDTO,
   ): Promise<void> {
     const category = await this.categoryRepo.findOne(id);
 

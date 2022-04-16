@@ -30,6 +30,7 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/auth/models/role.enum';
 import { CreateItemDTO } from 'src/products/models/create-item.dto';
 import { GetItemsQueryDTO } from 'src/products/models/get-items-query.dto';
+import { UpdateItemDTO } from 'src/products/models/update-item.dto';
 
 @ApiBearerAuth()
 @ApiTags('Product-Items')
@@ -449,7 +450,7 @@ export class ItemsController {
 
   @HttpCode(200)
   @ApiOperation({ summary: 'Update a product item' })
-  @ApiBody({ type: CreateItemDTO })
+  @ApiBody({ type: UpdateItemDTO })
   @ApiParam({
     name: 'id',
     type: Number,
@@ -691,7 +692,7 @@ export class ItemsController {
   })
   @Roles(Role.Admin)
   @Patch(':id')
-  async updateItem(@Param('id') id: number, @Body() itemDto: CreateItemDTO) {
+  async updateItem(@Param('id') id: number, @Body() itemDto: UpdateItemDTO) {
     if (isNaN(id)) {
       throw new HttpException('ID_MUST_BE_NUMBER', HttpStatus.CONFLICT);
     }

@@ -10,6 +10,7 @@ import { Category } from 'src/products/models/categories.entity';
 import { CreateItemDTO } from 'src/products/models/create-item.dto';
 import { ItemSearchOptions } from 'src/products/models/item-search-options.interface';
 import { Item } from 'src/products/models/item.entity';
+import { UpdateItemDTO } from 'src/products/models/update-item.dto';
 import { IsNull, Repository } from 'typeorm';
 
 @Injectable()
@@ -61,7 +62,7 @@ export class ItemsService {
     return newItem.id;
   }
 
-  async update(id: number, itemDto: CreateItemDTO): Promise<void> {
+  async update(id: number, itemDto: UpdateItemDTO): Promise<void> {
     let item = await this.itemsRepo.findOne(id);
 
     if (!item) {

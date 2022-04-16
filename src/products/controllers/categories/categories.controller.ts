@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiOkResponse,
   ApiOperation,
   ApiResponse,
@@ -24,6 +25,7 @@ import { CategoriesService } from 'src/products/services/categories/categories.s
 
 import { CreateCategoryDTO } from 'src/products/models/create-category.dto';
 import { Category } from 'src/products/models/categories.entity';
+import { UpdateCategoryDTO } from 'src/products/models/update-category.dto';
 
 @ApiBearerAuth()
 @ApiTags('Product-Categories')
@@ -46,6 +48,7 @@ export class CategoriesController {
 
   @HttpCode(200)
   @ApiOperation({ summary: 'Create a product category' })
+  @ApiBody({ type: CreateCategoryDTO })
   @ApiOkResponse({ status: 200 })
   @ApiResponse({
     description: 'The provided value is not valid',
@@ -85,6 +88,7 @@ export class CategoriesController {
 
   @HttpCode(200)
   @ApiOperation({ summary: 'Update a product category' })
+  @ApiBody({ type: UpdateCategoryDTO })
   @ApiOkResponse({ status: 200 })
   @ApiResponse({
     description: 'The provided value is not valid',
@@ -140,7 +144,7 @@ export class CategoriesController {
   @Patch(':id')
   async updateCategory(
     @Param('id') id: number,
-    @Body() categoryDto: CreateCategoryDTO,
+    @Body() categoryDto: UpdateCategoryDTO,
   ) {
     if (isNaN(id)) {
       throw new HttpException('ID_MUST_BE_NUMBER', HttpStatus.CONFLICT);
