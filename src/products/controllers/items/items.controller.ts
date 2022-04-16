@@ -65,6 +65,48 @@ export class ItemsController {
   })
   @ApiOkResponse({
     status: 200,
+    description: 'Return a list of paginated items',
+    schema: {
+      example: {
+        items: [
+          {
+            id: '2000',
+            title: 'Awesome Cotton Bike',
+            description: 'Sleek Concrete Tuna',
+            photo: 'http://lorempixel.com/640/480',
+            price: 4533.61,
+            discount: 56,
+            brand: 'cupiditate',
+            category: {
+              id: '1',
+              name: 'consectetur',
+            },
+            priceWithDiscount: 1994.79,
+          },
+          {
+            id: '1549',
+            title: 'Awesome Frozen Chips',
+            description: 'Handcrafted Granite Fish',
+            photo: 'http://lorempixel.com/640/480',
+            price: 8152.45,
+            discount: 31,
+            brand: 'aliquid',
+            category: {
+              id: '1',
+              name: 'consectetur',
+            },
+            priceWithDiscount: 5625.19,
+          },
+        ],
+        meta: {
+          totalItems: 2,
+          itemCount: 2,
+          itemsPerPage: 2,
+          totalPages: 1,
+          currentPage: 1,
+        },
+      },
+    },
   })
   @ApiResponse({
     description: 'The provided value is not valid',
@@ -139,6 +181,23 @@ export class ItemsController {
   })
   @ApiOkResponse({
     status: 200,
+    description: 'Return the selected item',
+    schema: {
+      example: {
+        id: '2000',
+        title: 'Awesome Cotton Bike',
+        description: 'Sleek Concrete Tuna',
+        photo: 'http://lorempixel.com/640/480',
+        price: 4533.61,
+        discount: 56,
+        brand: 'cupiditate',
+        category: {
+          id: '1',
+          name: 'consectetur',
+        },
+        priceWithDiscount: 1994.79,
+      },
+    },
   })
   @ApiResponse({
     description: 'The item id must be a number',

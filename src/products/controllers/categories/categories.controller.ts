@@ -23,6 +23,7 @@ import { Role } from 'src/auth/models/role.enum';
 import { CategoriesService } from 'src/products/services/categories/categories.service';
 
 import { CreateCategoryDTO } from 'src/products/models/create-category.dto';
+import { Category } from 'src/products/models/categories.entity';
 
 @ApiBearerAuth()
 @ApiTags('Product-Categories')
@@ -34,6 +35,8 @@ export class CategoriesController {
   @ApiOperation({ summary: 'Product categories' })
   @ApiOkResponse({
     status: 200,
+    type: Category,
+    isArray: true,
   })
   @Public()
   @Get()
@@ -45,6 +48,7 @@ export class CategoriesController {
   @ApiOperation({ summary: 'Create a product category' })
   @ApiOkResponse({
     status: 200,
+    type: Category,
   })
   @ApiResponse({
     description: 'The provided value is not valid',
