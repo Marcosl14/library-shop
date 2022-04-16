@@ -1,13 +1,28 @@
-import { Controller, Get, HttpCode } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpException,
+  HttpStatus,
+  Param,
+  Post,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOkResponse,
   ApiOperation,
+  ApiParam,
+  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { Public } from 'src/auth/decorators/public.decorator';
-import { Offer } from 'src/products/models/offer.entity';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/auth/models/role.enum';
 import { OffersService } from 'src/products/services/offers/offers.service';
+
+import { Offer } from 'src/products/models/offer.entity';
+import { CreateOfferDTO } from 'src/products/models/create-offer.dto';
 
 @ApiBearerAuth()
 @ApiTags('Product-Offers')
@@ -24,7 +39,247 @@ export class OffersController {
   })
   @Public()
   @Get()
-  async getAllItems() {
-    return await this.offersService.getOffers();
+  async getAllOffers() {
+    return await this.offersService.getAll();
+  }
+
+  @HttpCode(200)
+  @ApiOperation({ summary: 'Get a product offer' })
+  @ApiParam({
+    name: 'id',
+    type: Number,
+    required: false,
+    description: 'Offer Id',
+  })
+  @ApiOkResponse({
+    status: 200,
+    description: 'Return the selected offer',
+    type: Offer,
+  })
+  @ApiResponse({
+    description: 'The offer id must be a number',
+    status: 409.01,
+    schema: {
+      example: {
+        statusCode: 409,
+        message: 'ID_MUST_BE_NUMBER',
+      },
+    },
+  })
+  @Public()
+  @Get(':id')
+  async getOneOffer(@Param('id') id: number) {
+    if (isNaN(id)) {
+      throw new HttpException('ID_MUST_BE_NUMBER', HttpStatus.CONFLICT);
+    }
+    return this.offersService.getOne(id);
+  }
+
+  @HttpCode(200)
+  @ApiOperation({ summary: 'Create a product offer' })
+  @ApiOkResponse({
+    status: 200,
+    description: 'Return the created offer id',
+    schema: {
+      example: {
+        id: 1,
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.01,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'TITLE_MUST_BE_STRING',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.02,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMPTY_TITLE_FIELD',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Title must contain less than 100 characters',
+    status: 400.03,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'TITLE_MAX_LENGTH: 100',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.04,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'DESCRIPTION_MUST_BE_STRING',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Description must contain less than 1000 characters',
+    status: 400.05,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'DESCRIPTION_MAX_LENGTH: 1000',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.06,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'PHOTO_MUST_BE_A_URL_ADRESS',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Photo url must contain less than 100 characters',
+    status: 400.07,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'PHOTO_MAX_LENGTH: 100',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.08,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'PRICE_MUST_BE_NUMBER',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.09,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'PRICE_VALUE_MUST_BE_HIGHER_THAN_0.01',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.1,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'DISCOUNT_MUST_BE_NUMBER',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.11,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'DISCOUNT_VALUE_MUST_BE_HIGHER_THAN_0',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.12,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'DISCOUNT_VALUE_MUST_BE_LOWER_THAN_100',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.13,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'ITEMS_MUST_BE_ARRAY',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.14,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMPTY_ITEMS_ARRAY',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.15,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: "ITEMS_ID'S_MUST_BE_INTEGERS",
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.16,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMPTY_ITEMS_FIELD',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'User token not valid',
+    status: 401.01,
+    schema: {
+      example: {
+        statusCode: 401,
+        message: 'Unauthorized',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'User Role Validation failed',
+    status: 403.01,
+    schema: {
+      example: {
+        statusCode: 403,
+        message: 'Forbidden resource',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The selected item does not exist',
+    status: 404.01,
+    schema: {
+      example: {
+        statusCode: 404,
+        message: 'ITEM_ID_NOT_FOUND: ${id}',
+      },
+    },
+  })
+  @Roles(Role.Admin)
+  @Post()
+  async createOffer(@Body() offerDTO: CreateOfferDTO) {
+    const offerId = await this.offersService.create(offerDTO);
+    return { id: offerId };
   }
 }
