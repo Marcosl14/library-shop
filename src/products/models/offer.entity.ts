@@ -6,19 +6,17 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   AfterLoad,
-  JoinColumn,
-  ManyToOne,
   BeforeInsert,
   ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
-import { Category } from './categories.entity';
-import { Offer } from './offer.entity';
+import { Item } from './item.entity';
 
-@Entity('items')
-export class Item {
+@Entity('offers')
+export class Offer {
   @ApiProperty({
-    description: 'Item Id Number',
+    description: 'Offer Id Number',
     readOnly: true,
     type: Number,
   })
@@ -30,7 +28,7 @@ export class Item {
 
   @ApiProperty({
     example: 'Lorem ipsum dolor sit amet, consectetuer adipiscin',
-    description: 'Item title',
+    description: 'Offer title',
     nullable: false,
     maxLength: 100,
   })
@@ -44,7 +42,7 @@ export class Item {
 
   @ApiProperty({
     example: 'Lorem ipsum dolor sit amet, consectetuer adipiscin',
-    description: 'Item Description',
+    description: 'Offer Description',
     maxLength: 1000,
   })
   @Column({
@@ -57,7 +55,7 @@ export class Item {
 
   @ApiProperty({
     example: 'www.mypicture.com/347378jhdf32974987342_2347832756',
-    description: 'Item Photo',
+    description: 'Offer Photo',
     maxLength: 1000,
   })
   @Column({
@@ -71,7 +69,7 @@ export class Item {
   @ApiProperty({
     nullable: false,
     example: 999.99,
-    description: 'Item Price',
+    description: 'Offer Price',
     type: Number,
   })
   @Column({
@@ -86,7 +84,7 @@ export class Item {
   @ApiProperty({
     nullable: false,
     example: 25.5,
-    description: 'Item Discount',
+    description: 'Offer Discount',
     type: Number,
   })
   @Column({
@@ -102,35 +100,48 @@ export class Item {
   @ApiProperty({
     nullable: false,
     example: 155.24,
-    description: 'Item Price With Discount',
+    description: 'Offer Price With Discount',
     type: Number,
   })
   priceWithDiscount: number;
 
   @ApiProperty({
-    type: 'string',
-    example: 'Pizzini',
-    description: 'Brand of item',
+    nullable: false,
+    example: [
+      {
+        id: '2000',
+        title: 'Awesome Cotton Bike',
+        description: 'Sleek Concrete Tuna',
+        photo: 'http://lorempixel.com/640/480',
+        price: 4533.61,
+        discount: 56,
+        brand: 'cupiditate',
+        category: {
+          id: '1',
+          name: 'consectetur',
+        },
+        priceWithDiscount: 1994.79,
+      },
+      {
+        id: '1549',
+        title: 'Awesome Frozen Chips',
+        description: 'Handcrafted Granite Fish',
+        photo: 'http://lorempixel.com/640/480',
+        price: 8152.45,
+        discount: 31,
+        brand: 'aliquid',
+        category: {
+          id: '1',
+          name: 'consectetur',
+        },
+        priceWithDiscount: 5625.19,
+      },
+    ],
+    description: 'Offer Items',
   })
-  @Column({
-    name: 'brand',
-    type: 'character varying',
-    length: 30,
-    nullable: true,
-  })
-  brand?: string;
-
-  @ApiProperty({
-    type: Category,
-    description: 'Item Category',
-  })
-  @ManyToOne(() => Category, { eager: true, nullable: true })
-  @JoinColumn({ name: 'category_id' })
-  category: Category;
-
-  @ApiProperty({ type: () => Offer })
-  @ManyToMany((type) => Offer, (offer) => offer.items, { eager: false })
-  offers: Offer[];
+  @ManyToMany((type) => Item, (item) => item.offers, { eager: true })
+  @JoinTable()
+  items: Item[];
 
   @ApiHideProperty()
   @CreateDateColumn({
@@ -175,6 +186,5 @@ export class Item {
   @BeforeInsert()
   async lowerCaseAtributes() {
     this.title = this.title ? this.title.toLowerCase() : this.title;
-    this.brand = this.brand ? this.title.toLowerCase() : this.brand;
   }
 }
