@@ -18,6 +18,7 @@ export class UpdateItemDTO {
     nullable: false,
     maxLength: 100,
     type: String,
+    required: false,
   })
   @IsOptional()
   @IsString({
@@ -36,6 +37,7 @@ export class UpdateItemDTO {
     description: 'Item Description',
     maxLength: 1000,
     type: String,
+    required: false,
   })
   @IsOptional()
   @IsString({
@@ -54,6 +56,7 @@ export class UpdateItemDTO {
     description: 'Item Photo',
     maxLength: 1000,
     type: 'url',
+    required: false,
   })
   @IsOptional()
   @IsUrl({ message: 'PHOTO_MUST_BE_A_URL_ADRESS' })
@@ -67,6 +70,7 @@ export class UpdateItemDTO {
     example: 999.99,
     description: 'Item Price',
     type: Number,
+    required: false,
   })
   @IsOptional()
   @IsNumber({}, { message: 'PRICE_MUST_BE_NUMBER' })
@@ -78,6 +82,7 @@ export class UpdateItemDTO {
     example: 25,
     description: 'Item Discount',
     type: Number,
+    required: false,
   })
   @IsOptional()
   @IsNumber({}, { message: 'DISCOUNT_MUST_BE_NUMBER' })
@@ -89,6 +94,7 @@ export class UpdateItemDTO {
     type: String,
     example: 'Pizzini',
     description: 'Brand of item',
+    required: false,
   })
   @IsOptional()
   @IsString({
@@ -105,6 +111,7 @@ export class UpdateItemDTO {
   @ApiProperty({
     type: Number,
     description: 'Item Category Id',
+    required: false,
   })
   @IsOptional()
   @IsInt({ message: 'CATEGORY_ID_MUST_BE_INTEGER' })

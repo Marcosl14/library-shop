@@ -35,6 +35,7 @@ export class CreateItemDTO {
     description: 'Item Description',
     maxLength: 1000,
     type: String,
+    required: false,
   })
   @IsOptional()
   @IsString({
@@ -53,6 +54,7 @@ export class CreateItemDTO {
     description: 'Item Photo',
     maxLength: 1000,
     type: 'url',
+    required: false,
   })
   @IsOptional()
   @IsUrl({ message: 'PHOTO_MUST_BE_A_URL_ADRESS' })
@@ -76,6 +78,7 @@ export class CreateItemDTO {
     example: 25,
     description: 'Item Discount',
     type: Number,
+    required: false,
   })
   @IsOptional()
   @IsNumber({}, { message: 'DISCOUNT_MUST_BE_NUMBER' })
@@ -87,6 +90,7 @@ export class CreateItemDTO {
     type: String,
     example: 'Pizzini',
     description: 'Brand of item',
+    required: false,
   })
   @IsOptional()
   @IsString({
