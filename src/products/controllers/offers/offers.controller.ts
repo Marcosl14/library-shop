@@ -9,7 +9,6 @@ import {
   Param,
   Patch,
   Post,
-  Query,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -17,191 +16,52 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiParam,
-  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { Public } from 'src/auth/decorators/public.decorator';
-import { ItemsService } from 'src/products/services/items/items.service';
-
-import { DirectionENUM } from 'src/products/models/direction.enum';
-import { OrderByEnum } from 'src/products/models/order-by.enum';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/auth/models/role.enum';
-import { CreateItemDTO } from 'src/products/models/create-item.dto';
-import { GetItemsQueryDTO } from 'src/products/models/get-items-query.dto';
-import { UpdateItemDTO } from 'src/products/models/update-item.dto';
+import { OffersService } from 'src/products/services/offers/offers.service';
+
+import { Offer } from 'src/products/models/offer.entity';
+import { CreateOfferDTO } from 'src/products/models/create-offer.dto';
+import { UpdateOfferDTO } from 'src/products/models/update-offer.dto';
 
 @ApiBearerAuth()
-@ApiTags('Product-Items')
-@Controller('items')
-export class ItemsController {
-  constructor(private itemsService: ItemsService) {}
+@ApiTags('Product-Offers')
+@Controller('offers')
+export class OffersController {
+  constructor(private offersService: OffersService) {}
 
   @HttpCode(200)
-  @ApiOperation({ summary: 'Product items pagination' })
-  @ApiQuery({
-    name: 'categoryId',
-    type: Number,
-    required: false,
-    description: 'Category Id',
-  })
-  @ApiQuery({
-    name: 'orderBy',
-    enum: OrderByEnum,
-    required: false,
-    description: 'Ordering by keyword',
-  })
-  @ApiQuery({
-    name: 'dir',
-    enum: DirectionENUM,
-    required: false,
-    description: 'Ordering direction',
-  })
-  @ApiQuery({
-    name: 'page',
-    type: Number,
-    required: false,
-    description: 'Page number',
-  })
+  @ApiOperation({ summary: 'Get all offers' })
   @ApiOkResponse({
     status: 200,
-    description: 'Return a list of paginated items',
-    schema: {
-      example: {
-        items: [
-          {
-            id: '2000',
-            title: 'Awesome Cotton Bike',
-            description: 'Sleek Concrete Tuna',
-            photo: 'http://lorempixel.com/640/480',
-            price: 4533.61,
-            discount: 56,
-            brand: 'cupiditate',
-            category: {
-              id: '1',
-              name: 'consectetur',
-            },
-            priceWithDiscount: 1994.79,
-          },
-          {
-            id: '1549',
-            title: 'Awesome Frozen Chips',
-            description: 'Handcrafted Granite Fish',
-            photo: 'http://lorempixel.com/640/480',
-            price: 8152.45,
-            discount: 31,
-            brand: 'aliquid',
-            category: {
-              id: '1',
-              name: 'consectetur',
-            },
-            priceWithDiscount: 5625.19,
-          },
-        ],
-        meta: {
-          totalItems: 2,
-          itemCount: 2,
-          itemsPerPage: 2,
-          totalPages: 1,
-          currentPage: 1,
-        },
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.01,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'CATEGORY_ID_MUST_BE_INTEGER',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.02,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'ORDER_BY_NOT_VALID',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.03,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'DIRECTION_NOT_VALID',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.04,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'PAGE_MUST_BE_INTEGER',
-      },
-    },
+    type: Offer,
+    isArray: true,
   })
   @Public()
   @Get()
-  async getAllItems(@Query() getItemsQuery: GetItemsQueryDTO) {
-    const limit = 24;
-
-    const itemsPaginated = await this.itemsService.getItems(
-      {
-        categoryId: getItemsQuery.categoryId,
-        orderBy: getItemsQuery.orderBy,
-        direction: getItemsQuery.dir,
-      },
-      {
-        limit,
-        page: getItemsQuery.page,
-      },
-    );
-
-    // // en caso de querer eliminar el item.category, hacemos...
-    // // itemsPaginated.items.map((item) => delete item.category);
-
-    return itemsPaginated;
+  async getAllOffers() {
+    return await this.offersService.getAll();
   }
 
   @HttpCode(200)
-  @ApiOperation({ summary: 'Get a product item' })
+  @ApiOperation({ summary: 'Get an offer' })
   @ApiParam({
     name: 'id',
     type: Number,
     required: false,
-    description: 'Item Id',
+    description: 'Offer Id',
   })
   @ApiOkResponse({
     status: 200,
-    description: 'Return the selected item',
-    schema: {
-      example: {
-        id: '2000',
-        title: 'Awesome Cotton Bike',
-        description: 'Sleek Concrete Tuna',
-        photo: 'http://lorempixel.com/640/480',
-        price: 4533.61,
-        discount: 56,
-        brand: 'cupiditate',
-        category: {
-          id: '1',
-          name: 'consectetur',
-        },
-        priceWithDiscount: 1994.79,
-      },
-    },
+    description: 'Return the selected offer',
+    type: Offer,
   })
   @ApiResponse({
-    description: 'The item id must be a number',
+    description: 'The offer id must be a number',
     status: 409.01,
     schema: {
       example: {
@@ -212,22 +72,22 @@ export class ItemsController {
   })
   @Public()
   @Get(':id')
-  async getOneItem(@Param('id') id: number) {
+  async getOneOffer(@Param('id') id: number) {
     if (isNaN(id)) {
       throw new HttpException('ID_MUST_BE_NUMBER', HttpStatus.CONFLICT);
     }
-    return this.itemsService.getOneItem(id);
+    return this.offersService.getOne(id);
   }
 
   @HttpCode(200)
-  @ApiOperation({ summary: 'Create a product item' })
-  @ApiBody({ type: CreateItemDTO })
+  @ApiOperation({ summary: 'Create an offer' })
+  @ApiBody({ type: CreateOfferDTO })
   @ApiOkResponse({
     status: 200,
-    description: 'Return the created item id',
+    description: 'Return the created offer id',
     schema: {
       example: {
-        id: 2,
+        id: 1,
       },
     },
   })
@@ -248,112 +108,12 @@ export class ItemsController {
       example: {
         statusCode: 400,
         message: 'EMPTY_TITLE_FIELD',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.03,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'DESCRIPTION_MUST_BE_STRING',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.04,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'PHOTO_MUST_BE_A_URL_ADRESS',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.05,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'PRICE_MUST_BE_NUMBER',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.06,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'PRICE_VALUE_MUST_BE_HIGHER_THAN_0.01',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.07,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'DISCOUNT_MUST_BE_NUMBER',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.08,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'DISCOUNT_VALUE_MUST_BE_HIGHER_THAN_0',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.09,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'DISCOUNT_VALUE_MUST_BE_LOWER_THAN_100',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.1,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'BRAND_MUST_BE_STRING',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.11,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'CATEGORY_ID_MUST_BE_INTEGER',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.12,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'EMPTY_CATEGORY_FIELD',
       },
     },
   })
   @ApiResponse({
     description: 'Title must contain less than 100 characters',
-    status: 400.13,
+    status: 400.03,
     schema: {
       example: {
         statusCode: 400,
@@ -362,8 +122,18 @@ export class ItemsController {
     },
   })
   @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.04,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'DESCRIPTION_MUST_BE_STRING',
+      },
+    },
+  })
+  @ApiResponse({
     description: 'Description must contain less than 1000 characters',
-    status: 400.14,
+    status: 400.05,
     schema: {
       example: {
         statusCode: 400,
@@ -372,8 +142,18 @@ export class ItemsController {
     },
   })
   @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.06,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'PHOTO_MUST_BE_A_URL_ADRESS',
+      },
+    },
+  })
+  @ApiResponse({
     description: 'Photo url must contain less than 100 characters',
-    status: 400.15,
+    status: 400.07,
     schema: {
       example: {
         statusCode: 400,
@@ -382,32 +162,92 @@ export class ItemsController {
     },
   })
   @ApiResponse({
-    description: 'Brand name must contain less than 30 characters',
+    description: 'The provided value is not valid',
+    status: 400.08,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'PRICE_MUST_BE_NUMBER',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.09,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'PRICE_VALUE_MUST_BE_HIGHER_THAN_0.01',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.1,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'DISCOUNT_MUST_BE_NUMBER',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.11,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'DISCOUNT_VALUE_MUST_BE_HIGHER_THAN_0',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.12,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'DISCOUNT_VALUE_MUST_BE_LOWER_THAN_100',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.13,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'ITEMS_MUST_BE_ARRAY',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.14,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMPTY_ITEMS_ARRAY',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.15,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: "ITEMS_ID'S_MUST_BE_INTEGERS",
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
     status: 400.16,
     schema: {
       example: {
         statusCode: 400,
-        message: 'BRAND_MAX_LENGTH: 30',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.17,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'EMPTY_DESCRITPION_FIELD',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.18,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'EMPTY_BRAND_FIELD',
+        message: 'EMPTY_ITEMS_FIELD',
       },
     },
   })
@@ -432,33 +272,39 @@ export class ItemsController {
     },
   })
   @ApiResponse({
-    description: 'The selected category does not exist',
+    description: 'The selected item does not exist',
     status: 404.01,
     schema: {
       example: {
         statusCode: 404,
-        message: 'CATEGORY_NOT_FOUND',
+        message: 'ITEM_ID_NOT_FOUND: ${id}',
       },
     },
   })
   @Roles(Role.Admin)
   @Post()
-  async createItem(@Body() itemDto: CreateItemDTO) {
-    // console.log() ver si valido que el producto ya exista, o no.....
-    return { id: await this.itemsService.create(itemDto) };
+  async createOffer(@Body() offerDTO: CreateOfferDTO) {
+    const offerId = await this.offersService.create(offerDTO);
+    return { id: offerId };
   }
 
   @HttpCode(200)
-  @ApiOperation({ summary: 'Update a product item' })
-  @ApiBody({ type: UpdateItemDTO })
+  @ApiOperation({ summary: 'Update an offer' })
+  @ApiBody({ type: UpdateOfferDTO })
   @ApiParam({
     name: 'id',
     type: Number,
-    required: true,
-    description: 'Item Id',
+    required: false,
+    description: 'Offer Id',
   })
   @ApiOkResponse({
     status: 200,
+    description: 'Return the updated offer id',
+    schema: {
+      example: {
+        id: 1,
+      },
+    },
   })
   @ApiResponse({
     description: 'The provided value is not valid',
@@ -481,108 +327,8 @@ export class ItemsController {
     },
   })
   @ApiResponse({
-    description: 'The provided value is not valid',
+    description: 'Title must contain less than 100 characters',
     status: 400.03,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'DESCRIPTION_MUST_BE_STRING',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.04,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'PHOTO_MUST_BE_A_URL_ADRESS',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.05,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'PRICE_MUST_BE_NUMBER',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.06,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'PRICE_VALUE_MUST_BE_HIGHER_THAN_0.01',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.07,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'DISCOUNT_MUST_BE_NUMBER',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.08,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'DISCOUNT_VALUE_MUST_BE_HIGHER_THAN_0',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.09,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'DISCOUNT_VALUE_MUST_BE_LOWER_THAN_100',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.1,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'BRAND_MUST_BE_STRING',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.11,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'CATEGORY_ID_MUST_BE_INTEGER',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.12,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'EMPTY_CATEGORY_FIELD',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.13,
     schema: {
       example: {
         statusCode: 400,
@@ -592,7 +338,17 @@ export class ItemsController {
   })
   @ApiResponse({
     description: 'The provided value is not valid',
-    status: 400.14,
+    status: 400.04,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'DESCRIPTION_MUST_BE_STRING',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Description must contain less than 1000 characters',
+    status: 400.05,
     schema: {
       example: {
         statusCode: 400,
@@ -602,7 +358,17 @@ export class ItemsController {
   })
   @ApiResponse({
     description: 'The provided value is not valid',
-    status: 400.15,
+    status: 400.06,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'PHOTO_MUST_BE_A_URL_ADRESS',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Photo url must contain less than 100 characters',
+    status: 400.07,
     schema: {
       example: {
         statusCode: 400,
@@ -612,11 +378,91 @@ export class ItemsController {
   })
   @ApiResponse({
     description: 'The provided value is not valid',
+    status: 400.08,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'PRICE_MUST_BE_NUMBER',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.09,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'PRICE_VALUE_MUST_BE_HIGHER_THAN_0.01',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.1,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'DISCOUNT_MUST_BE_NUMBER',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.11,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'DISCOUNT_VALUE_MUST_BE_HIGHER_THAN_0',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.12,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'DISCOUNT_VALUE_MUST_BE_LOWER_THAN_100',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.13,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'ITEMS_MUST_BE_ARRAY',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.14,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMPTY_ITEMS_ARRAY',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.15,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: "ITEMS_ID'S_MUST_BE_INTEGERS",
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
     status: 400.16,
     schema: {
       example: {
         statusCode: 400,
-        message: 'BRAND_MAX_LENGTH: 30',
+        message: 'EMPTY_ITEMS_FIELD',
       },
     },
   })
@@ -626,17 +472,7 @@ export class ItemsController {
     schema: {
       example: {
         statusCode: 400,
-        message: 'EMPTY_DESCRITPION_FIELD',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.18,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'EMPTY_BRAND_FIELD',
+        message: 'EMPTY_DESCRIPTION_FIELD',
       },
     },
   })
@@ -666,62 +502,50 @@ export class ItemsController {
     schema: {
       example: {
         statusCode: 404,
-        message: 'ITEM_NOT_FOUND',
+        message: 'ITEM_ID_NOT_FOUND: ${id}',
       },
     },
   })
   @ApiResponse({
-    description: 'The selected category does not exist',
+    description: 'The selected offer does not exist',
     status: 404.02,
     schema: {
       example: {
         statusCode: 404,
-        message: 'CATEGORY_NOT_FOUND',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The item id must be a number',
-    status: 409.01,
-    schema: {
-      example: {
-        statusCode: 409,
-        message: 'ID_MUST_BE_NUMBER',
+        message: 'OFFER_NOT_FOUND',
       },
     },
   })
   @Roles(Role.Admin)
   @Patch(':id')
-  async updateItem(@Param('id') id: number, @Body() itemDto: UpdateItemDTO) {
-    if (isNaN(id)) {
-      throw new HttpException('ID_MUST_BE_NUMBER', HttpStatus.CONFLICT);
-    }
-    await this.itemsService.update(id, itemDto);
+  async updateOffer(@Param('id') id, @Body() offerDTO: UpdateOfferDTO) {
+    const offerId = await this.offersService.update(id, offerDTO);
+    return { id: offerId };
   }
 
   @HttpCode(200)
-  @ApiOperation({ summary: 'Delete a product item' })
+  @ApiOperation({ summary: 'Delete an offer' })
   @ApiParam({
     name: 'id',
     type: Number,
     required: false,
-    description: 'Item Id',
+    description: 'Offer Id',
   })
   @ApiOkResponse({
     status: 200,
   })
   @ApiResponse({
-    description: 'The selected item does not exist',
+    description: 'The selected offer does not exist',
     status: 404.01,
     schema: {
       example: {
         statusCode: 404,
-        message: 'ITEM_NOT_FOUND',
+        message: 'OFFER_NOT_FOUND',
       },
     },
   })
   @ApiResponse({
-    description: 'The item id must be a number',
+    description: 'The offer id must be a number',
     status: 409.01,
     schema: {
       example: {
@@ -732,10 +556,10 @@ export class ItemsController {
   })
   @Roles(Role.Admin)
   @Delete(':id')
-  async deleteItem(@Param('id') id: number) {
+  async deleteOffer(@Param('id') id: number) {
     if (isNaN(id)) {
       throw new HttpException('ID_MUST_BE_NUMBER', HttpStatus.CONFLICT);
     }
-    await this.itemsService.delete(id);
+    await this.offersService.delete(id);
   }
 }

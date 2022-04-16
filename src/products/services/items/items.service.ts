@@ -10,6 +10,7 @@ import { Category } from 'src/products/models/categories.entity';
 import { CreateItemDTO } from 'src/products/models/create-item.dto';
 import { ItemSearchOptions } from 'src/products/models/item-search-options.interface';
 import { Item } from 'src/products/models/item.entity';
+import { UpdateItemDTO } from 'src/products/models/update-item.dto';
 import { IsNull, Repository } from 'typeorm';
 
 @Injectable()
@@ -45,7 +46,7 @@ export class ItemsService {
     return this.itemsRepo.findOne(id);
   }
 
-  async create(itemDto: CreateItemDTO) {
+  async create(itemDto: CreateItemDTO): Promise<number> {
     const category = await this.categoryRepo.findOne(itemDto.category_id);
 
     if (!category) {
@@ -57,9 +58,11 @@ export class ItemsService {
     newItem.category = category;
 
     await this.itemsRepo.save(newItem);
+
+    return newItem.id;
   }
 
-  async update(id: number, itemDto: CreateItemDTO) {
+  async update(id: number, itemDto: UpdateItemDTO): Promise<void> {
     let item = await this.itemsRepo.findOne(id);
 
     if (!item) {
@@ -82,7 +85,13 @@ export class ItemsService {
     await this.itemsRepo.update(id, item);
   }
 
-  async delete(id: number) {
+  async delete(id: number): Promise<void> {
+    const item = await this.itemsRepo.findOne(id);
+
+    if (!item) {
+      throw new HttpException('ITEM_NOT_FOUND', HttpStatus.NOT_FOUND);
+    }
+
     await this.itemsRepo.softDelete(id);
   }
 }

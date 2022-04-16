@@ -11,14 +11,16 @@ import {
   Min,
 } from 'class-validator';
 
-export class CreateItemDTO {
+export class UpdateItemDTO {
   @ApiProperty({
     example: 'Lorem ipsum dolor sit amet, consectetuer adipiscin',
     description: 'Item title',
     nullable: false,
     maxLength: 100,
     type: String,
+    required: false,
   })
+  @IsOptional()
   @IsString({
     message: 'TITLE_MUST_BE_STRING',
   })
@@ -68,7 +70,9 @@ export class CreateItemDTO {
     example: 999.99,
     description: 'Item Price',
     type: Number,
+    required: false,
   })
+  @IsOptional()
   @IsNumber({}, { message: 'PRICE_MUST_BE_NUMBER' })
   @Min(0.01, { message: 'PRICE_VALUE_MUST_BE_HIGHER_THAN_0.01' })
   price: number;
@@ -107,7 +111,9 @@ export class CreateItemDTO {
   @ApiProperty({
     type: Number,
     description: 'Item Category Id',
+    required: false,
   })
+  @IsOptional()
   @IsInt({ message: 'CATEGORY_ID_MUST_BE_INTEGER' })
   @IsNotEmpty({
     message: 'EMPTY_CATEGORY_FIELD',

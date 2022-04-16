@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  ArrayNotEmpty,
+  IsArray,
   IsInt,
   IsNotEmpty,
   IsNumber,
@@ -11,13 +13,14 @@ import {
   Min,
 } from 'class-validator';
 
-export class CreateItemDTO {
+export class UpdateOfferDTO {
   @ApiProperty({
     example: 'Lorem ipsum dolor sit amet, consectetuer adipiscin',
-    description: 'Item title',
+    description: 'Offer title',
     nullable: false,
     maxLength: 100,
     type: String,
+    required: false,
   })
   @IsString({
     message: 'TITLE_MUST_BE_STRING',
@@ -25,6 +28,7 @@ export class CreateItemDTO {
   @IsNotEmpty({
     message: 'EMPTY_TITLE_FIELD',
   })
+  @IsOptional()
   @MaxLength(100, {
     message: 'TITLE_MAX_LENGTH: 100',
   })
@@ -32,7 +36,7 @@ export class CreateItemDTO {
 
   @ApiProperty({
     example: 'Lorem ipsum dolor sit amet, consectetuer adipiscin',
-    description: 'Item Description',
+    description: 'Offer Description',
     maxLength: 1000,
     type: String,
     required: false,
@@ -51,7 +55,7 @@ export class CreateItemDTO {
 
   @ApiProperty({
     example: 'www.mypicture.com/347378jhdf32974987342_2347832756',
-    description: 'Item Photo',
+    description: 'Offer Photo',
     maxLength: 1000,
     type: 'url',
     required: false,
@@ -66,9 +70,11 @@ export class CreateItemDTO {
   @ApiProperty({
     nullable: false,
     example: 999.99,
-    description: 'Item Price',
+    description: 'Offer Price',
     type: Number,
+    required: false,
   })
+  @IsOptional()
   @IsNumber({}, { message: 'PRICE_MUST_BE_NUMBER' })
   @Min(0.01, { message: 'PRICE_VALUE_MUST_BE_HIGHER_THAN_0.01' })
   price: number;
@@ -76,7 +82,7 @@ export class CreateItemDTO {
   @ApiProperty({
     nullable: false,
     example: 25,
-    description: 'Item Discount',
+    description: 'Offer Discount',
     type: Number,
     required: false,
   })
@@ -87,30 +93,14 @@ export class CreateItemDTO {
   discount?: number;
 
   @ApiProperty({
-    type: String,
-    example: 'Pizzini',
-    description: 'Brand of item',
+    type: Number,
+    description: "Offer Items Id's",
     required: false,
   })
   @IsOptional()
-  @IsString({
-    message: 'BRAND_MUST_BE_STRING',
-  })
-  @IsNotEmpty({
-    message: 'EMPTY_BRAND_FIELD',
-  })
-  @MaxLength(30, {
-    message: 'BRAND_MAX_LENGTH: 30',
-  })
-  brand?: string;
-
-  @ApiProperty({
-    type: Number,
-    description: 'Item Category Id',
-  })
-  @IsInt({ message: 'CATEGORY_ID_MUST_BE_INTEGER' })
-  @IsNotEmpty({
-    message: 'EMPTY_CATEGORY_FIELD',
-  })
-  category_id: number;
+  @IsArray({ message: 'ITEMS_MUST_BE_ARRAY' })
+  @ArrayNotEmpty({ message: 'EMPTY_ITEMS_ARRAY' })
+  @IsInt({ message: "ITEMS_ID'S_MUST_BE_INTEGERS", each: true })
+  @IsNotEmpty({ message: 'EMPTY_ITEMS_FIELD' })
+  items: number[];
 }

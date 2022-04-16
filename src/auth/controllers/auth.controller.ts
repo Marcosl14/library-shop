@@ -242,6 +242,26 @@ export class AuthController {
     },
   })
   @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.21,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMPTY_FIRSTNAME_FIELD',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.22,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMPTY_LASTNAME_FIELD',
+      },
+    },
+  })
+  @ApiResponse({
     description: 'The user is allready registered',
     status: 409.01,
     schema: {

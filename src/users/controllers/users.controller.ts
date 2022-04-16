@@ -34,8 +34,6 @@ import { ConfirmEmailchangeDTO } from '../models/confirm-email-change.dto';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { PasswordForgottenDTO } from '../models/password-forgotten.dto';
 import { UserDataDTO } from '../models/user-data.dto';
-import { Roles } from 'src/auth/decorators/roles.decorator';
-import { Role } from 'src/auth/models/role.enum';
 
 @ApiBearerAuth()
 @ApiTags('Users')
@@ -48,10 +46,10 @@ export class UsersController {
   ) {}
 
   @HttpCode(200)
-  @ApiOperation({ summary: 'Get the username' })
+  @ApiOperation({ summary: 'Get some user data' })
   @ApiOkResponse({
     status: 200,
-    description: 'Get the username',
+    description: 'Get some user data',
     schema: {
       example: {
         firstname: 'Fernando',
@@ -171,6 +169,26 @@ export class UsersController {
       example: {
         statusCode: 400,
         message: 'INVALID_PHONE_NUMBER',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.1,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMPTY_FIRSTNAME_FIELD',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.11,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMPTY_LASTNAME_FIELD',
       },
     },
   })

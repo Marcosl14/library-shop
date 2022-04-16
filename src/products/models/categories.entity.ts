@@ -1,5 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { ApiProperty } from '@nestjs/swagger';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  DeleteDateColumn,
+} from 'typeorm';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { Item } from './item.entity';
 
 @Entity('categories')
@@ -30,6 +36,15 @@ export class Category {
     nullable: false,
   })
   name: string;
+
+  @ApiHideProperty()
+  @DeleteDateColumn({
+    name: 'deleted_at',
+    type: 'timestamptz',
+    default: null,
+    select: false,
+  })
+  deletedAt?: Date;
 
   @OneToMany(() => Item, (item) => item.category)
   items: Item[];
