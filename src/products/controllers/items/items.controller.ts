@@ -711,6 +711,16 @@ export class ItemsController {
     status: 200,
   })
   @ApiResponse({
+    description: 'The selected item does not exist',
+    status: 404.01,
+    schema: {
+      example: {
+        statusCode: 404,
+        message: 'ITEM_NOT_FOUND',
+      },
+    },
+  })
+  @ApiResponse({
     description: 'The item id must be a number',
     status: 409.01,
     schema: {
