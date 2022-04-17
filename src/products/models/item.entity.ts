@@ -9,11 +9,11 @@ import {
   JoinColumn,
   ManyToOne,
   BeforeInsert,
-  ManyToMany,
+  OneToMany,
 } from 'typeorm';
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { Category } from './categories.entity';
-import { Offer } from './offer.entity';
+import { OfferItem } from './offer-item.entity';
 
 @Entity('items')
 export class Item {
@@ -128,9 +128,13 @@ export class Item {
   @JoinColumn({ name: 'category_id' })
   category: Category;
 
-  @ApiProperty({ type: () => Offer })
-  @ManyToMany((type) => Offer, (offer) => offer.items, { eager: false })
-  offers: Offer[];
+  @ApiProperty({
+    type: () => OfferItem,
+    isArray: true,
+    description: 'List of Offer-Items',
+  })
+  @OneToMany(() => OfferItem, (offerItem) => offerItem.item)
+  offerItem: OfferItem[];
 
   @ApiHideProperty()
   @CreateDateColumn({

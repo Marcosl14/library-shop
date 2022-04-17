@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   ArrayNotEmpty,
   IsArray,
-  IsInt,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -11,7 +11,9 @@ import {
   Max,
   MaxLength,
   Min,
+  ValidateNested,
 } from 'class-validator';
+import { RawOfferItem } from './raw-offer-item.dto';
 
 export class UpdateOfferDTO {
   @ApiProperty({
@@ -93,14 +95,14 @@ export class UpdateOfferDTO {
   discount?: number;
 
   @ApiProperty({
-    type: Number,
-    description: "Offer Items Id's",
-    required: false,
+    type: RawOfferItem,
+    description: "Offer Items Id's and Quantities",
   })
   @IsOptional()
   @IsArray({ message: 'ITEMS_MUST_BE_ARRAY' })
   @ArrayNotEmpty({ message: 'EMPTY_ITEMS_ARRAY' })
-  @IsInt({ message: "ITEMS_ID'S_MUST_BE_INTEGERS", each: true })
+  @ValidateNested({ each: true })
+  @Type(() => RawOfferItem)
   @IsNotEmpty({ message: 'EMPTY_ITEMS_FIELD' })
-  items: number[];
+  items: RawOfferItem[];
 }

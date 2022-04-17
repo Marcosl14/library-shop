@@ -132,8 +132,18 @@ export class OffersController {
     },
   })
   @ApiResponse({
-    description: 'Description must contain less than 1000 characters',
+    description: 'The provided value is not valid',
     status: 400.05,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMPTY_DESCRIPTION_FIELD',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Description must contain less than 1000 characters',
+    status: 400.06,
     schema: {
       example: {
         statusCode: 400,
@@ -143,7 +153,7 @@ export class OffersController {
   })
   @ApiResponse({
     description: 'The provided value is not valid',
-    status: 400.06,
+    status: 400.07,
     schema: {
       example: {
         statusCode: 400,
@@ -153,7 +163,7 @@ export class OffersController {
   })
   @ApiResponse({
     description: 'Photo url must contain less than 100 characters',
-    status: 400.07,
+    status: 400.08,
     schema: {
       example: {
         statusCode: 400,
@@ -163,7 +173,7 @@ export class OffersController {
   })
   @ApiResponse({
     description: 'The provided value is not valid',
-    status: 400.08,
+    status: 400.09,
     schema: {
       example: {
         statusCode: 400,
@@ -173,7 +183,7 @@ export class OffersController {
   })
   @ApiResponse({
     description: 'The provided value is not valid',
-    status: 400.09,
+    status: 400.1,
     schema: {
       example: {
         statusCode: 400,
@@ -183,7 +193,7 @@ export class OffersController {
   })
   @ApiResponse({
     description: 'The provided value is not valid',
-    status: 400.1,
+    status: 400.11,
     schema: {
       example: {
         statusCode: 400,
@@ -193,7 +203,7 @@ export class OffersController {
   })
   @ApiResponse({
     description: 'The provided value is not valid',
-    status: 400.11,
+    status: 400.12,
     schema: {
       example: {
         statusCode: 400,
@@ -203,7 +213,7 @@ export class OffersController {
   })
   @ApiResponse({
     description: 'The provided value is not valid',
-    status: 400.12,
+    status: 400.13,
     schema: {
       example: {
         statusCode: 400,
@@ -213,7 +223,7 @@ export class OffersController {
   })
   @ApiResponse({
     description: 'The provided value is not valid',
-    status: 400.13,
+    status: 400.14,
     schema: {
       example: {
         statusCode: 400,
@@ -223,21 +233,11 @@ export class OffersController {
   })
   @ApiResponse({
     description: 'The provided value is not valid',
-    status: 400.14,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'EMPTY_ITEMS_ARRAY',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
     status: 400.15,
     schema: {
       example: {
         statusCode: 400,
-        message: "ITEMS_ID'S_MUST_BE_INTEGERS",
+        message: 'EMPTY_ITEMS_ARRAY',
       },
     },
   })
@@ -248,6 +248,46 @@ export class OffersController {
       example: {
         statusCode: 400,
         message: 'EMPTY_ITEMS_FIELD',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.17,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'ITEM_ID_MUST_BE_INTEGER',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.18,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMPTY_ITEM_ID_FIELD',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.19,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'ITEM_QUANTITY_MUST_BE_INTEGER',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.2,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMPTY_ITEM_QUANTITY_FIELD',
       },
     },
   })
@@ -278,6 +318,16 @@ export class OffersController {
       example: {
         statusCode: 404,
         message: 'ITEM_ID_NOT_FOUND: ${id}',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'There is already an offer with the same items',
+    status: 409.01,
+    schema: {
+      example: {
+        statusCode: 409,
+        message: 'OFFER_ALREADY_EXISTS',
       },
     },
   })
@@ -347,8 +397,18 @@ export class OffersController {
     },
   })
   @ApiResponse({
-    description: 'Description must contain less than 1000 characters',
+    description: 'The provided value is not valid',
     status: 400.05,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMPTY_DESCRIPTION_FIELD',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'Description must contain less than 1000 characters',
+    status: 400.06,
     schema: {
       example: {
         statusCode: 400,
@@ -358,7 +418,7 @@ export class OffersController {
   })
   @ApiResponse({
     description: 'The provided value is not valid',
-    status: 400.06,
+    status: 400.07,
     schema: {
       example: {
         statusCode: 400,
@@ -368,7 +428,7 @@ export class OffersController {
   })
   @ApiResponse({
     description: 'Photo url must contain less than 100 characters',
-    status: 400.07,
+    status: 400.08,
     schema: {
       example: {
         statusCode: 400,
@@ -378,7 +438,7 @@ export class OffersController {
   })
   @ApiResponse({
     description: 'The provided value is not valid',
-    status: 400.08,
+    status: 400.09,
     schema: {
       example: {
         statusCode: 400,
@@ -388,7 +448,7 @@ export class OffersController {
   })
   @ApiResponse({
     description: 'The provided value is not valid',
-    status: 400.09,
+    status: 400.1,
     schema: {
       example: {
         statusCode: 400,
@@ -398,7 +458,7 @@ export class OffersController {
   })
   @ApiResponse({
     description: 'The provided value is not valid',
-    status: 400.1,
+    status: 400.11,
     schema: {
       example: {
         statusCode: 400,
@@ -408,7 +468,7 @@ export class OffersController {
   })
   @ApiResponse({
     description: 'The provided value is not valid',
-    status: 400.11,
+    status: 400.12,
     schema: {
       example: {
         statusCode: 400,
@@ -418,7 +478,7 @@ export class OffersController {
   })
   @ApiResponse({
     description: 'The provided value is not valid',
-    status: 400.12,
+    status: 400.13,
     schema: {
       example: {
         statusCode: 400,
@@ -428,7 +488,7 @@ export class OffersController {
   })
   @ApiResponse({
     description: 'The provided value is not valid',
-    status: 400.13,
+    status: 400.14,
     schema: {
       example: {
         statusCode: 400,
@@ -438,21 +498,11 @@ export class OffersController {
   })
   @ApiResponse({
     description: 'The provided value is not valid',
-    status: 400.14,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'EMPTY_ITEMS_ARRAY',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
     status: 400.15,
     schema: {
       example: {
         statusCode: 400,
-        message: "ITEMS_ID'S_MUST_BE_INTEGERS",
+        message: 'EMPTY_ITEMS_ARRAY',
       },
     },
   })
@@ -472,7 +522,37 @@ export class OffersController {
     schema: {
       example: {
         statusCode: 400,
-        message: 'EMPTY_DESCRIPTION_FIELD',
+        message: 'ITEM_ID_MUST_BE_INTEGER',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.18,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMPTY_ITEM_ID_FIELD',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.19,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'ITEM_QUANTITY_MUST_BE_INTEGER',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.2,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'EMPTY_ITEM_QUANTITY_FIELD',
       },
     },
   })
@@ -513,6 +593,16 @@ export class OffersController {
       example: {
         statusCode: 404,
         message: 'OFFER_NOT_FOUND',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'There is already an offer with the same items',
+    status: 409.01,
+    schema: {
+      example: {
+        statusCode: 409,
+        message: 'OFFER_ALREADY_EXISTS',
       },
     },
   })

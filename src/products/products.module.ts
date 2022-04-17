@@ -9,9 +9,10 @@ import { CategoriesService } from './services/categories/categories.service';
 import { OffersController } from './controllers/offers/offers.controller';
 import { OffersService } from './services/offers/offers.service';
 import { Offer } from './models/offer.entity';
+import { OfferItem } from './models/offer-item.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Item, Category, Offer])],
+  imports: [TypeOrmModule.forFeature([Item, Category, Offer, OfferItem])],
   controllers: [ItemsController, CategoriesController, OffersController],
   providers: [ItemsService, CategoriesService, OffersService],
 })

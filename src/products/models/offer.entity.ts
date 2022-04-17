@@ -11,7 +11,7 @@ import {
   JoinTable,
 } from 'typeorm';
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
-import { Item } from './item.entity';
+import { OfferItem } from './offer-item.entity';
 
 @Entity('offers')
 export class Offer {
@@ -82,7 +82,7 @@ export class Offer {
   price: number;
 
   @ApiProperty({
-    nullable: false,
+    nullable: true,
     example: 25.5,
     description: 'Offer Discount',
     type: Number,
@@ -109,39 +109,49 @@ export class Offer {
     nullable: false,
     example: [
       {
-        id: '2000',
-        title: 'Awesome Cotton Bike',
-        description: 'Sleek Concrete Tuna',
-        photo: 'http://lorempixel.com/640/480',
-        price: 4533.61,
-        discount: 56,
-        brand: 'cupiditate',
-        category: {
-          id: '1',
-          name: 'consectetur',
+        id: '145',
+        quantity: 8,
+        item: {
+          id: '441',
+          title: 'Awesome Concrete Pants',
+          description: 'Sleek Rubber Shoes',
+          photo: 'http://lorempixel.com/640/480',
+          price: 3708.23,
+          discount: 98,
+          brand: 'in',
+          category: {
+            id: '7',
+            name: 'nihil',
+          },
+          priceWithDiscount: 74.16,
         },
-        priceWithDiscount: 1994.79,
       },
       {
-        id: '1549',
-        title: 'Awesome Frozen Chips',
-        description: 'Handcrafted Granite Fish',
-        photo: 'http://lorempixel.com/640/480',
-        price: 8152.45,
-        discount: 31,
-        brand: 'aliquid',
-        category: {
-          id: '1',
-          name: 'consectetur',
+        id: '1',
+        quantity: 9,
+        item: {
+          id: '1671',
+          title: 'Awesome Concrete Pizza',
+          description: 'Intelligent Frozen Towels',
+          photo: 'http://lorempixel.com/640/480',
+          price: 1438.41,
+          discount: 85,
+          brand: 'est',
+          category: {
+            id: '10',
+            name: 'eius',
+          },
+          priceWithDiscount: 215.76,
         },
-        priceWithDiscount: 5625.19,
       },
     ],
     description: 'Offer Items',
   })
-  @ManyToMany((type) => Item, (item) => item.offers, { eager: true })
+  @ManyToMany((type) => OfferItem, (offerItem) => offerItem.offers, {
+    eager: true,
+  })
   @JoinTable()
-  items: Item[];
+  offerItems: OfferItem[];
 
   @ApiHideProperty()
   @CreateDateColumn({
