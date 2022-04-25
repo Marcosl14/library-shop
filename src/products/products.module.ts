@@ -15,5 +15,6 @@ import { OfferItem } from './models/offer-item.entity';
   imports: [TypeOrmModule.forFeature([Item, Category, Offer, OfferItem])],
   controllers: [ItemsController, CategoriesController, OffersController],
   providers: [ItemsService, CategoriesService, OffersService],
+  exports: [ItemsService, OffersService],
 })
 export class ProductsModule {}

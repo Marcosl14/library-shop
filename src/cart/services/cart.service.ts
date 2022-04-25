@@ -10,6 +10,14 @@ import { CreateCartDTO } from '../models/create-cart.dto';
 export class CartService {
   constructor(@InjectRepository(Cart) private cartRepo: Repository<Cart>) {}
 
+  async getByUserId(user: User): Promise<Cart> {
+    return this.cartRepo.findOne({ user });
+  }
+
+  async addToCart(cart: Cart): Promise<void> {
+    await this.cartRepo.save(cart);
+  }
+
   async create(cartDTO: CreateCartDTO): Promise<Cart> {
     const cart: Cart = await this.cartRepo.create(cartDTO);
     return await this.cartRepo.save(cart);
