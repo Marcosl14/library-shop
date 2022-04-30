@@ -3,24 +3,38 @@ import { OnEvent } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/models/user.entity';
 import { Repository } from 'typeorm';
+import { CartItem } from '../models/cart-item.entity';
+import { CartOffer } from '../models/cart-offer.entity';
 import { Cart } from '../models/cart.entity';
 import { CreateCartDTO } from '../models/create-cart.dto';
 
 @Injectable()
 export class CartService {
-  constructor(@InjectRepository(Cart) private cartRepo: Repository<Cart>) {}
+  constructor(
+    @InjectRepository(Cart) private cartRepo: Repository<Cart>,
+    @InjectRepository(CartItem) private cartItemRepo: Repository<CartItem>,
+    @InjectRepository(CartOffer) private cartOfferRepo: Repository<CartOffer>,
+  ) {}
 
   async getByUserId(user: User): Promise<Cart> {
     return this.cartRepo.findOne({ user });
   }
 
-  async addToCart(cart: Cart): Promise<void> {
+  async save(cart: Cart): Promise<void> {
     await this.cartRepo.save(cart);
   }
 
   async create(cartDTO: CreateCartDTO): Promise<Cart> {
     const cart: Cart = await this.cartRepo.create(cartDTO);
     return await this.cartRepo.save(cart);
+  }
+
+  async removeCartOffer(cartOffer: CartOffer): Promise<void> {
+    await this.cartOfferRepo.remove(cartOffer);
+  }
+
+  async removeCartItem(cartItem: CartItem): Promise<void> {
+    await this.cartItemRepo.remove(cartItem);
   }
 
   // console.log();

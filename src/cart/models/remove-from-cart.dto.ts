@@ -20,11 +20,11 @@ export class RemoveFromCartDTO {
 
   @ApiProperty({
     type: Number,
-    description: 'Product Id',
+    description: 'Item or Offer Id',
   })
-  @IsInt({ message: 'PRODUCT_ID_MUST_BE_INTEGER' })
+  @IsInt({ message: 'ITEM_OR_OFFER_ID_MUST_BE_INTEGER' })
   @IsNotEmpty({
-    message: 'EMPTY_PRODUCT_ID_FIELD',
+    message: 'EMPTY_ITEM_OR_OFFER_ID_FIELD',
   })
-  product_id: number;
+  type_id: number;
 }
