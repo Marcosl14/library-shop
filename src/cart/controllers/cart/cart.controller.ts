@@ -17,15 +17,15 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { AddToCartDTO } from 'src/cart/models/add-to-cart.dto';
+import { CartItem } from 'src/cart/models/cart-item.entity';
+import { CartOffer } from 'src/cart/models/cart-offer.entity';
+import { Cart } from 'src/cart/models/cart.entity';
+import { RemoveFromCartDTO } from 'src/cart/models/remove-from-cart.dto';
+import { CartProductType } from 'src/cart/models/type.enum';
+import { CartService } from 'src/cart/services/cart/cart.service';
 import { ItemsService } from 'src/products/services/items/items.service';
 import { OffersService } from 'src/products/services/offers/offers.service';
-import { AddToCartDTO } from '../models/add-to-cart.dto';
-import { CartItem } from '../models/cart-item.entity';
-import { CartOffer } from '../models/cart-offer.entity';
-import { Cart } from '../models/cart.entity';
-import { RemoveFromCartDTO } from '../models/remove-from-cart.dto';
-import { CartProductType } from '../models/type.enum';
-import { CartService } from '../services/cart.service';
 
 @ApiBearerAuth()
 @ApiTags('Carts')
@@ -33,7 +33,7 @@ import { CartService } from '../services/cart.service';
 export class CartController {
   constructor(
     private cartService: CartService,
-    private offerService_: OffersService,
+    private offerService: OffersService,
     private itemService: ItemsService,
   ) {}
 
@@ -188,7 +188,7 @@ export class CartController {
         cart.cartItems.push(cartItem);
       }
     } else if (addToCartDTO.type == CartProductType.Offer) {
-      const offerFound = await this.offerService_.getOne(
+      const offerFound = await this.offerService.getOne(
         addToCartDTO.product_id,
       );
 

@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CartItem } from 'src/cart/models/cart-item.entity';
+import { CartOffer } from 'src/cart/models/cart-offer.entity';
+import { Cart } from 'src/cart/models/cart.entity';
 import { User } from 'src/users/models/user.entity';
-import { Repository } from 'typeorm';
-import { CartItem } from '../models/cart-item.entity';
-import { CartOffer } from '../models/cart-offer.entity';
-import { Cart } from '../models/cart.entity';
-import { CreateCartDTO } from '../models/create-cart.dto';
+import { IsNull, Repository } from 'typeorm';
 
 @Injectable()
 export class CartService {
@@ -17,15 +16,16 @@ export class CartService {
   ) {}
 
   async getByUserId(user: User): Promise<Cart> {
-    return this.cartRepo.findOne({ user });
+    return this.cartRepo.findOne({ user, purchasedAt: IsNull() });
   }
 
   async save(cart: Cart): Promise<void> {
     await this.cartRepo.save(cart);
   }
 
-  async create(cartDTO: CreateCartDTO): Promise<Cart> {
-    const cart: Cart = await this.cartRepo.create(cartDTO);
+  async create(user: User): Promise<Cart> {
+    const cart: Cart = await this.cartRepo.create();
+    cart.user = user;
     return await this.cartRepo.save(cart);
   }
 
@@ -43,8 +43,6 @@ export class CartService {
   // debemos validar que si el carrito no existe, entonces que lo intente crear nuevamente.
   @OnEvent(['registration.in_progress'])
   handleUserCreatedEvent(user: User) {
-    const cart: CreateCartDTO = new CreateCartDTO();
-    cart.user = user;
-    this.create(cart);
+    this.create(user);
   }
 }
