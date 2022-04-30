@@ -172,7 +172,7 @@ export class CartController {
       let cartItemIndex: number;
 
       for (let index = 0; index < cart.cartItems.length; index++) {
-        if (cart.cartItems[index].id == itemFound.id) {
+        if (cart.cartItems[index].item.id == itemFound.id) {
           cartItemAlreadyExists = cart.cartItems[index];
           cartItemIndex = index;
         }
