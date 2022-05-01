@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Pagination, paginate } from 'nestjs-typeorm-paginate';
 import { CartItem } from 'src/cart/models/cart-item.entity';
 import { CartOffer } from 'src/cart/models/cart-offer.entity';
 import { Cart } from 'src/cart/models/cart.entity';
+import { GetPurchasesAsAdminDTO } from 'src/cart/models/get-purchases-as-admin-query.dto';
 import { User } from 'src/users/models/user.entity';
-import { IsNull, Repository } from 'typeorm';
+import { IsNull, Not, Repository } from 'typeorm';
 
 @Injectable()
 export class CartService {
@@ -17,6 +19,36 @@ export class CartService {
 
   async getByUserId(user: User): Promise<Cart> {
     return this.cartRepo.findOne({ user, purchasedAt: IsNull() });
+  }
+
+  async getAllPurchasedCartsAsUser(user?: User): Promise<Cart[]> {
+    return await this.cartRepo.find({ user, purchasedAt: Not(IsNull()) });
+  }
+
+  async getAllPurchasedCarts(
+    getPurchasesAsAdminQueryDto: GetPurchasesAsAdminDTO,
+  ): Promise<Pagination<Cart>> {
+    const purchases = await this.cartRepo
+      .createQueryBuilder('cart')
+      .select([
+        'cart.id',
+        'users.firstname',
+        'users.lastname',
+        'users.phone',
+        'users.email',
+      ])
+      .addSelect(['cart.purchased_at'])
+      .where({ purchasedAt: Not(IsNull()) })
+      .leftJoin('cart.user', 'users')
+      .leftJoinAndSelect('cart.cartItems', 'cart_items')
+      .leftJoinAndSelect('cart_items.item', 'items')
+      .leftJoinAndSelect('cart.cartOffers', 'cart_offers')
+      .leftJoinAndSelect('cart_offers.offer', 'offers');
+
+    return paginate(purchases, {
+      page: getPurchasesAsAdminQueryDto.page,
+      limit: 24,
+    });
   }
 
   async save(cart: Cart): Promise<void> {

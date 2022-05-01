@@ -45,7 +45,16 @@ export class CartController {
   })
   @Get()
   async getCurrentCart(@Req() req) {
-    return await this.cartService.getByUserId(req.user);
+    const user = req.user;
+
+    let cart = await this.cartService.getByUserId(user);
+
+    if (!cart) {
+      await this.cartService.create(user);
+      cart = await this.cartService.getByUserId(user);
+    }
+
+    return cart;
   }
 
   @HttpCode(201)
@@ -157,7 +166,13 @@ export class CartController {
   })
   @Post()
   async addToCart(@Req() req, @Body() addToCartDTO: AddToCartDTO) {
-    const cart = await this.cartService.getByUserId(req.user);
+    const user = req.user;
+    let cart = await this.cartService.getByUserId(user);
+
+    if (!cart) {
+      await this.cartService.create(user);
+      cart = await this.cartService.getByUserId(user);
+    }
 
     if (addToCartDTO.type == CartProductType.Item) {
       const itemFound = await this.itemService.getOneItem(
@@ -303,6 +318,10 @@ export class CartController {
     @Body() removeFromCartDTO: RemoveFromCartDTO,
   ) {
     const cart = await this.cartService.getByUserId(req.user);
+
+    if (!cart) {
+      throw new HttpException('ITEM_NOT_FOUND_IN_CART', HttpStatus.NOT_FOUND);
+    }
 
     if (removeFromCartDTO.type == CartProductType.Item) {
       const itemFound = cart.cartItems.find(

@@ -150,7 +150,7 @@ export class Offer {
   @ManyToMany((type) => OfferItem, (offerItem) => offerItem.offers, {
     eager: true,
   })
-  @JoinTable()
+  @JoinTable({ name: 'offers_offer_items' })
   offerItems: OfferItem[];
 
   @ApiHideProperty()

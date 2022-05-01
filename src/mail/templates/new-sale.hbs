@@ -1,0 +1,51 @@
+<p>Se ha registrado una nueva compra en Librería Punto & Coma!!!</p>
+
+<br />
+
+<p>A continuación se detalla la informacion de la compra</p>
+
+<br />
+
+<p>El usuario: {{name}}</p>
+<p>Telefono: {{phone}}</p>
+<p>Email: {{email}}</p>
+
+<br />
+
+<p>Ha efectuado la siguiente compra:</p>
+
+<br />
+
+{{#if items includeZero=true}}
+  <p>Productos</p>
+  {{#each items}}
+    <li>Id:
+      {{this.item.id}}
+      <p>Nombre: {{this.item.title}}</p>
+      <p>Precio con descuento: {{this.item.priceWithDiscount}}</p>
+      <p>Cantidad: {{this.quantity}}</p>
+    </li>
+  {{/each}}
+{{/if}}
+
+<br />
+
+{{#if offers includeZero=true}}
+  <p>Ofertas</p>
+  {{#each offers}}
+    <li>Id:
+      {{this.offer.id}}
+      <p>Nombre: {{this.offer.title}}</p>
+      <p>Precio con descuento: {{this.offer.priceWithDiscount}}</p>
+      <p>Cantidad: {{this.quantity}}</p>
+    </li>
+  {{/each}}
+{{/if}}
+
+<br />
+
+<p>Precio Final: {{finalPrice}}</p>
+
+<br />
+
+<p>Si éste mail no era destinado para usted, puede ignorarlo tranquilamente</p>

@@ -9,7 +9,6 @@ import {
   ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
-  RelationId,
   UpdateDateColumn,
 } from 'typeorm';
 import { CartItem } from './cart-item.entity';
@@ -87,7 +86,7 @@ export class Cart {
     cascade: true,
     onDelete: 'CASCADE',
   })
-  @JoinTable()
+  @JoinTable({ name: 'cart_cart_items' })
   cartItems: CartItem[];
 
   // console.log() agregar ejemplo igual que en cartItems;
@@ -96,7 +95,7 @@ export class Cart {
     cascade: true,
     onDelete: 'CASCADE',
   })
-  @JoinTable()
+  @JoinTable({ name: 'cart_cart_offers' })
   cartOffers: CartOffer[];
 
   @ApiHideProperty()
