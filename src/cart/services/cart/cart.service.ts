@@ -43,7 +43,8 @@ export class CartService {
       .leftJoinAndSelect('cart.cartItems', 'cart_items')
       .leftJoinAndSelect('cart_items.item', 'items')
       .leftJoinAndSelect('cart.cartOffers', 'cart_offers')
-      .leftJoinAndSelect('cart_offers.offer', 'offers');
+      .leftJoinAndSelect('cart_offers.offer', 'offers')
+      .orderBy('cart.purchased_at', 'DESC');
 
     return paginate(purchases, {
       page: getPurchasesAsAdminQueryDto.page,
