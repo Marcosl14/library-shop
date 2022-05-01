@@ -1,9 +1,10 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
+import { Cart } from 'src/cart/models/cart.entity';
 import { EmailChange } from 'src/users/models/email-change.entity';
-
 import { User } from 'src/users/models/user.entity';
+import constants from '../constants/env.constants';
 
 @Injectable()
 export class MailService {
@@ -48,6 +49,32 @@ export class MailService {
     });
   }
 
+  async replyToSales(user: User, cart: Cart) {
+    let finalPrice = 0;
+
+    cart.cartItems.forEach((cartItem) => {
+      finalPrice += cartItem.item.priceWithDiscount * cartItem.quantity;
+    });
+
+    cart.cartOffers.forEach((cartOffer) => {
+      finalPrice += cartOffer.offer.priceWithDiscount * cartOffer.quantity;
+    });
+
+    await this.mailerService.sendMail({
+      to: constants().REPLY_TO_MAIL,
+      subject: 'Se ha registrado una nueva compra en Librería Punto & Coma!!!',
+      template: '../new-sale.hbs',
+      context: {
+        name: `${user.firstname} ${user.lastname}`,
+        phone: user.phone,
+        email: user.email,
+        items: cart.cartItems,
+        offers: cart.cartOffers,
+        finalPrice: finalPrice.toFixed(2),
+      },
+    });
+  }
+
   @OnEvent('registration.in_progress')
   resendConfirmationEmail(user: User, registryUUID: string) {
     this.sendUserConfirmation(user.email, registryUUID);
@@ -66,5 +93,10 @@ export class MailService {
   @OnEvent('password.forgotten')
   sendPasswordForgottenEmail(user: User, password: string) {
     this.sendPasswordChange(user, password);
+  }
+
+  @OnEvent('purchase.created')
+  notificationToSalesDepartment(user: User, cart: Cart) {
+    this.replyToSales(user, cart);
   }
 }

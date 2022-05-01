@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsNotEmpty } from 'class-validator';
+import { IsInt, IsNotEmpty, Min } from 'class-validator';
 
 export class RawOfferItem {
   @ApiProperty({
@@ -20,5 +20,6 @@ export class RawOfferItem {
   @IsNotEmpty({
     message: 'EMPTY_ITEM_QUANTITY_FIELD',
   })
+  @Min(1, { message: 'MIN_QUANTITY: 1' })
   quantity: number;
 }

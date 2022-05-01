@@ -42,7 +42,7 @@ export class ItemsService {
     return paginate(query, paginationOptions);
   }
 
-  async getOneItem(id: number) {
+  async getOneItem(id: number): Promise<Item | null> {
     return this.itemsRepo.findOne(id);
   }
 

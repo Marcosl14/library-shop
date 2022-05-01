@@ -22,5 +22,5 @@ export class GetItemsQueryDTO {
   @IsInt({ message: 'PAGE_MUST_BE_INTEGER' })
   @IsOptional()
   @Type(() => Number)
-  page: 1;
+  page = 1;
 }
