@@ -31,6 +31,7 @@ import { Role } from 'src/auth/models/role.enum';
 import { CreateItemDTO } from 'src/products/models/create-item.dto';
 import { GetItemsQueryDTO } from 'src/products/models/get-items-query.dto';
 import { UpdateItemDTO } from 'src/products/models/update-item.dto';
+import { Item } from 'src/products/models/item.entity';
 
 @ApiBearerAuth()
 @ApiTags('Product-Items')

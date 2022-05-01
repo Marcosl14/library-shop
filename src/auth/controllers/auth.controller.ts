@@ -293,12 +293,6 @@ export class AuthController {
   @ApiOkResponse({
     status: 200,
     description: 'User registration successfull',
-    schema: {
-      example: {
-        accessToken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IjVAZ21haWwuY29tIiwiaWF0IjoxNjQxOTEzNzUyLCJleHAiOjE2NDE5MTM4MTJ9.MzLodS6l0APNS5Y1l6Gfc8biA1S0TBasUjikB7E_hEU',
-      },
-    },
   })
   @ApiResponse({
     description: 'The provided value is not valid',

@@ -350,11 +350,6 @@ export class OffersController {
   @ApiOkResponse({
     status: 200,
     description: 'Return the updated offer id',
-    schema: {
-      example: {
-        id: 1,
-      },
-    },
   })
   @ApiResponse({
     description: 'The provided value is not valid',
@@ -609,8 +604,7 @@ export class OffersController {
   @Roles(Role.Admin)
   @Patch(':id')
   async updateOffer(@Param('id') id, @Body() offerDTO: UpdateOfferDTO) {
-    const offerId = await this.offersService.update(id, offerDTO);
-    return { id: offerId };
+    await this.offersService.update(id, offerDTO);
   }
 
   @HttpCode(200)
