@@ -81,10 +81,6 @@ export class CartService {
     await this.cartItemRepo.remove(cartItem);
   }
 
-  // console.log();
-  // debería haber otro evento para crear carrito, cuando la compra del carrito actual fue efectuada.
-  // ver bien la lógica de creación del carrito. Si algo pasa durante la creación (al momento del registro del usuario), entonces siempre
-  // debemos validar que si el carrito no existe, entonces que lo intente crear nuevamente.
   @OnEvent(['registration.in_progress'])
   handleUserCreatedEvent(user: User) {
     this.create(user);

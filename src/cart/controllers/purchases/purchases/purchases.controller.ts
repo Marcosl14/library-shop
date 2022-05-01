@@ -23,6 +23,34 @@ export class PurchasesController {
     private eventEmitter: EventEmitter2,
   ) {}
 
+  @HttpCode(200)
+  @ApiOperation({
+    summary: 'Get all the users purchases - Only Admins',
+  })
+  @ApiOkResponse({
+    status: 200,
+    description: 'Return all purchased carts',
+  })
+  @ApiResponse({
+    description: 'User token not valid',
+    status: 401.01,
+    schema: {
+      example: {
+        statusCode: 401,
+        message: 'Unauthorized',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'User Role Validation failed',
+    status: 403.01,
+    schema: {
+      example: {
+        statusCode: 403,
+        message: 'Forbidden resource',
+      },
+    },
+  })
   @Roles(Role.Admin)
   @Get('admin')
   async getAllPurchasesAsAdmin(
@@ -33,6 +61,24 @@ export class PurchasesController {
     );
   }
 
+  @HttpCode(200)
+  @ApiOperation({
+    summary: 'Get all the user purchases',
+  })
+  @ApiOkResponse({
+    status: 200,
+    description: 'Return all purchased carts for that specific user',
+  })
+  @ApiResponse({
+    description: 'User token not valid',
+    status: 401.01,
+    schema: {
+      example: {
+        statusCode: 401,
+        message: 'Unauthorized',
+      },
+    },
+  })
   @Get()
   async getAllPurchasesAsUser(@Req() req) {
     return await this.cartService.getAllPurchasedCartsAsUser(req.user);
@@ -71,7 +117,7 @@ export class PurchasesController {
     const user = req.user;
     const cart: Cart = await this.cartService.getByUserId(user);
 
-    if (cart.cartItems.length === 0 && cart.cartOffers.length === 0) {
+    if (cart && cart.cartItems.length === 0 && cart.cartOffers.length === 0) {
       throw new HttpException('EMPTY_CART', HttpStatus.CONFLICT);
     }
 
