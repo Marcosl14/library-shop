@@ -18,11 +18,16 @@ export class CartService {
   ) {}
 
   async getByUserId(user: User): Promise<Cart> {
-    return this.cartRepo.findOne({ user, purchasedAt: IsNull() });
+    return await this.cartRepo.findOne({
+      where: { user, purchasedAt: IsNull() },
+    });
   }
 
   async getAllPurchasedCartsAsUser(user?: User): Promise<Cart[]> {
-    return await this.cartRepo.find({ user, purchasedAt: Not(IsNull()) });
+    return await this.cartRepo.find({
+      where: { user, purchasedAt: Not(IsNull()) },
+      select: ['purchasedAt'],
+    });
   }
 
   async getAllPurchasedCarts(
@@ -41,10 +46,16 @@ export class CartService {
       .where({ purchasedAt: Not(IsNull()) })
       .leftJoin('cart.user', 'users')
       .leftJoinAndSelect('cart.cartItems', 'cart_items')
-      .leftJoinAndSelect('cart_items.item', 'items')
+      .leftJoinAndSelect('cart_items.item', 'item')
+      .leftJoinAndSelect('item.category', 'itemCategory')
       .leftJoinAndSelect('cart.cartOffers', 'cart_offers')
       .leftJoinAndSelect('cart_offers.offer', 'offers')
+      .leftJoinAndSelect('offers.offerItems', 'offer_items')
+      .leftJoinAndSelect('offer_items.item', 'offerItem')
+      .leftJoinAndSelect('offerItem.category', 'offerItemCategory')
       .orderBy('cart.purchased_at', 'DESC');
+
+    //console.log() ver si es necesario pasar toda la información....
 
     return paginate(purchases, {
       page: getPurchasesAsAdminQueryDto.page,
