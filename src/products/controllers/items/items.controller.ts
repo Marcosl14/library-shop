@@ -166,8 +166,8 @@ export class ItemsController {
       },
     );
 
-    // // en caso de querer eliminar el item.category, hacemos...
-    // // itemsPaginated.items.map((item) => delete item.category);
+    // en caso de querer eliminar el item.category, hacemos...
+    // itemsPaginated.items.map((item) => delete item.category);
 
     return itemsPaginated;
   }

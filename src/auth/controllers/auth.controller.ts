@@ -281,11 +281,6 @@ export class AuthController {
       if (user.confirmedRegistration) {
         throw new HttpException('USER_ALREADY_REGISTERED', HttpStatus.CONFLICT);
       } else {
-        console.log();
-        // ésto hay que verlo bien, porque si el user cambió algun parámetro, por ejemplo,
-        // password o teléfono, no lo estaríamos validando, ni incluso, almacenando en la BD.
-        // lo correcto sería crear otro endpoint, para reenviar el mail con un nuevo UUID.
-
         await this.authService.updateRegistryUUID(userDTO);
       }
     } else {
