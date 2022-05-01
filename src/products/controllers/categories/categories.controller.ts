@@ -157,6 +157,7 @@ export class CategoriesController {
   @ApiOperation({ summary: 'Delete a product category' })
   @ApiOkResponse({
     status: 200,
+    description: 'Category removed',
   })
   @ApiResponse({
     description: 'The provided category Id was not found',

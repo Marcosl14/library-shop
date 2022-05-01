@@ -46,10 +46,10 @@ export class UsersController {
   ) {}
 
   @HttpCode(200)
-  @ApiOperation({ summary: 'Get some user data' })
+  @ApiOperation({ summary: 'Get user data' })
   @ApiOkResponse({
     status: 200,
-    description: 'Get some user data',
+    description: 'Get user data',
     schema: {
       example: {
         firstname: 'Fernando',
@@ -80,7 +80,7 @@ export class UsersController {
   @ApiBody({ type: UserDataDTO })
   @ApiOkResponse({
     status: 200,
-    description: 'Data changed',
+    description: 'User data updated',
   })
   @ApiResponse({
     description: 'Firstname must be a string',
