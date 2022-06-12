@@ -37,6 +37,19 @@ export class Category {
   })
   name: string;
 
+  @ApiProperty({
+    example: 'www.mypicture.com/347378jhdf32974987342_2347832756',
+    description: 'Category Icon',
+    maxLength: 1000,
+  })
+  @Column({
+    name: 'icon',
+    type: 'character varying',
+    length: 1000,
+    nullable: false,
+  })
+  icon: string;
+
   @ApiHideProperty()
   @DeleteDateColumn({
     name: 'deleted_at',
