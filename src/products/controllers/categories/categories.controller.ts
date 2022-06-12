@@ -80,6 +80,26 @@ export class CategoriesController {
       },
     },
   })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.04,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'ICON_MUST_BE_A_URL_ADRESS',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.05,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'ICON_MAX_LENGTH: 1000',
+      },
+    },
+  })
   @Roles(Role.Admin)
   @Post()
   async createCategory(@Body() categoryDto: CreateCategoryDTO) {
@@ -117,6 +137,26 @@ export class CategoriesController {
       example: {
         statusCode: 400,
         message: 'NAME_MAX_LENGTH: 100',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.04,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'ICON_MUST_BE_A_URL_ADRESS',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.05,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'ICON_MAX_LENGTH: 1000',
       },
     },
   })
