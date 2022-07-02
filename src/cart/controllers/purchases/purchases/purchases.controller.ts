@@ -14,6 +14,8 @@ import {
   ApiOkResponse,
   ApiResponse,
   ApiQuery,
+  ApiBearerAuth,
+  ApiTags,
 } from '@nestjs/swagger';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/auth/models/role.enum';
@@ -21,6 +23,8 @@ import { Cart } from 'src/cart/models/cart.entity';
 import { GetPurchasesAsAdminDTO } from 'src/cart/models/get-purchases-as-admin-query.dto';
 import { CartService } from 'src/cart/services/cart/cart.service';
 
+@ApiBearerAuth()
+@ApiTags('Purchases')
 @Controller('purchases')
 export class PurchasesController {
   constructor(

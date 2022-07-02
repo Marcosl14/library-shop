@@ -11,7 +11,7 @@ export class MailService {
   constructor(private mailerService: MailerService) {}
 
   async sendUserConfirmation(email: string, registryUUID: string) {
-    const url = `example.com/auth/confirm?registry-uuid=${registryUUID}`;
+    const url = `http://localhost:3001/confirmar/${registryUUID}`;
     await this.mailerService.sendMail({
       to: email,
       subject:
@@ -24,7 +24,7 @@ export class MailService {
   }
 
   async sendEmailChange(emailChange: EmailChange) {
-    const url = `example.com/auth/confirm?registry-uuid=${emailChange.uuid}`;
+    const url = `http://localhost:3001/confirmar-email/${emailChange.uuid}`;
     await this.mailerService.sendMail({
       to: emailChange.newEmail,
       subject:
