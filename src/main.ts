@@ -20,20 +20,23 @@ async function bootstrap() {
     }),
   );
 
-  const config = new DocumentBuilder()
-    .setTitle('Library-Shop API')
-    .setDescription('The API description')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .build();
+  if (process.env.NODE_ENV == 'development') {
+    const config = new DocumentBuilder()
+      .setTitle('Library-Shop API')
+      .setDescription('The API description')
+      .setVersion('1.0')
+      .addBearerAuth()
+      .build();
 
-  const options: SwaggerDocumentOptions = {
-    operationIdFactory: (controllerKey: string, methodKey: string) => methodKey,
-  };
+    const options: SwaggerDocumentOptions = {
+      operationIdFactory: (controllerKey: string, methodKey: string) =>
+        methodKey,
+    };
 
-  const document = SwaggerModule.createDocument(app, config, options);
+    const document = SwaggerModule.createDocument(app, config, options);
 
-  SwaggerModule.setup('api', app, document);
+    SwaggerModule.setup('api', app, document);
+  }
 
   await app.listen(3000);
 }
