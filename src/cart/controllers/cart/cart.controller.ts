@@ -236,7 +236,7 @@ export class CartController {
   }
 
   @HttpCode(200)
-  @ApiOperation({ summary: 'Remove items or offers from cart' })
+  @ApiOperation({ summary: 'Remove one item or one offer from cart' })
   @ApiBody({ type: RemoveFromCartDTO })
   @ApiOkResponse({
     status: 200,
@@ -336,7 +336,7 @@ export class CartController {
         throw new HttpException('ITEM_NOT_FOUND_IN_CART', HttpStatus.NOT_FOUND);
       }
 
-      delete cart.cartOffers[itemFoundIndex];
+      delete cart.cartItems[itemFoundIndex];
 
       await this.cartService.save(cart);
       await this.cartService.removeCartItem(itemFound);
