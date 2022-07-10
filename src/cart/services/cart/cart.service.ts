@@ -26,7 +26,7 @@ export class CartService {
   async getAllPurchasedCartsAsUser(user?: User): Promise<Cart[]> {
     return await this.cartRepo.find({
       where: { user, purchasedAt: Not(IsNull()) },
-      select: ['purchasedAt'],
+      select: ['purchasedAt', 'id'],
     });
   }
 
