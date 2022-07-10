@@ -529,6 +529,7 @@ export class PurchasesController {
     schema: {
       example: [
         {
+          id: '1',
           purchasedAt: '2022-04-30T23:13:23.129Z',
           cartItems: [
             {
