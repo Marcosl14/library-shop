@@ -27,6 +27,9 @@ export class CartService {
     return await this.cartRepo.find({
       where: { user, purchasedAt: Not(IsNull()) },
       select: ['purchasedAt', 'id'],
+      order: {
+        purchasedAt: 'DESC',
+      },
     });
   }
 
