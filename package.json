@@ -1,6 +1,9 @@
 {
   "name": "library-shop",
   "version": "0.0.1",
+  "engines": {
+    "node": "17.8"
+  },
   "description": "",
   "author": "",
   "private": true,
