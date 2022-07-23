@@ -1,0 +1,14 @@
+{
+  "name": "libray-shop-backend",
+  "repository": "https://github.com/Marcosl14/library-shop",
+  "success_url": "/",
+  "scripts": {
+    "predeploy": "npm install && npm run build"
+  },
+  "addons": ["heroku-postgresql"],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ]
+}
