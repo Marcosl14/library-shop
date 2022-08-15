@@ -6,6 +6,7 @@ import {
   paginate,
   Pagination,
 } from 'nestjs-typeorm-paginate';
+import { prependListener } from 'process';
 import { Category } from 'src/products/models/categories.entity';
 import { CreateItemDTO } from 'src/products/models/create-item.dto';
 import { ItemSearchOptions } from 'src/products/models/item-search-options.interface';
@@ -23,7 +24,7 @@ export class ItemsService {
   async getItems(
     searchOptions: ItemSearchOptions,
     paginationOptions: IPaginationOptions,
-  ): Promise<Pagination<Item>> {
+  ) {
     const query = this.itemsRepo.createQueryBuilder('items');
     query.leftJoinAndSelect('items.category', 'category');
 
@@ -36,7 +37,7 @@ export class ItemsService {
     }
 
     if (searchOptions.searchProductString) {
-      query.where('LOWER(items.title) like LOWER(:search)', {
+      query.andWhere('LOWER(items.title) like LOWER(:search)', {
         search: `%${searchOptions.searchProductString}%`,
       });
     }
@@ -45,9 +46,9 @@ export class ItemsService {
       query.orderBy(searchOptions.orderBy, searchOptions.direction);
     }
 
-    console.log(await query.getMany());
+    const paginationQuery = await paginate(query, paginationOptions);
 
-    return paginate(query, paginationOptions);
+    return paginationQuery;
   }
 
   async getOneItem(id: number): Promise<Item | null> {
