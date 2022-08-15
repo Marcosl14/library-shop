@@ -64,6 +64,12 @@ export class ItemsController {
     required: false,
     description: 'Page number',
   })
+  @ApiQuery({
+    name: 'searchProductString',
+    type: String,
+    required: false,
+    description: 'Search String',
+  })
   @ApiOkResponse({
     status: 200,
     description: 'Return a list of paginated items',
@@ -146,6 +152,16 @@ export class ItemsController {
       example: {
         statusCode: 400,
         message: 'PAGE_MUST_BE_INTEGER',
+      },
+    },
+  })
+  @ApiResponse({
+    description: 'The provided value is not valid',
+    status: 400.05,
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'SEARCH_PRODUCT_MUST_BE_STRING',
       },
     },
   })

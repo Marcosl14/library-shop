@@ -24,7 +24,7 @@ export class GetItemsQueryDTO {
   @Type(() => Number)
   page = 1;
 
-  @IsString({})
+  @IsString({ message: 'SEARCH_PRODUCT_MUST_BE_STRING' })
   @IsOptional()
   @Type(() => String)
   searchProductString = '';
