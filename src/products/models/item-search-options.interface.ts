@@ -5,4 +5,5 @@ export interface ItemSearchOptions {
   categoryId?: number;
   orderBy?: OrderByEnum;
   direction?: DirectionENUM;
+  searchProductString?: string;
 }

@@ -1,5 +1,5 @@
 import { Transform, Type } from 'class-transformer';
-import { IsEnum, IsInt, IsOptional } from 'class-validator';
+import { IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
 import { DirectionENUM } from './direction.enum';
 import { OrderByEnum } from './order-by.enum';
 
@@ -23,4 +23,9 @@ export class GetItemsQueryDTO {
   @IsOptional()
   @Type(() => Number)
   page = 1;
+
+  @IsString({})
+  @IsOptional()
+  @Type(() => String)
+  searchProductString = '';
 }

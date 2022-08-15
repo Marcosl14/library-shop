@@ -11,7 +11,7 @@ import { CreateItemDTO } from 'src/products/models/create-item.dto';
 import { ItemSearchOptions } from 'src/products/models/item-search-options.interface';
 import { Item } from 'src/products/models/item.entity';
 import { UpdateItemDTO } from 'src/products/models/update-item.dto';
-import { IsNull, Repository } from 'typeorm';
+import { IsNull, Repository, Like } from 'typeorm';
 
 @Injectable()
 export class ItemsService {
@@ -35,9 +35,17 @@ export class ItemsService {
       });
     }
 
+    if (searchOptions.searchProductString) {
+      query.where('LOWER(items.title) like LOWER(:search)', {
+        search: `%${searchOptions.searchProductString}%`,
+      });
+    }
+
     if (searchOptions.orderBy) {
       query.orderBy(searchOptions.orderBy, searchOptions.direction);
     }
+
+    console.log(await query.getMany());
 
     return paginate(query, paginationOptions);
   }
