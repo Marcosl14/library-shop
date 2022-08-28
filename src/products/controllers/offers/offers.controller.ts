@@ -177,7 +177,7 @@ export class OffersController {
     schema: {
       example: {
         statusCode: 400,
-        message: 'PRICE_MUST_BE_NUMBER',
+        message: 'DISCOUNT_MUST_BE_NUMBER',
       },
     },
   })
@@ -187,7 +187,7 @@ export class OffersController {
     schema: {
       example: {
         statusCode: 400,
-        message: 'PRICE_VALUE_MUST_BE_HIGHER_THAN_0.01',
+        message: 'DISCOUNT_VALUE_MUST_BE_HIGHER_THAN_0',
       },
     },
   })
@@ -197,7 +197,7 @@ export class OffersController {
     schema: {
       example: {
         statusCode: 400,
-        message: 'DISCOUNT_MUST_BE_NUMBER',
+        message: 'DISCOUNT_VALUE_MUST_BE_LOWER_THAN_100',
       },
     },
   })
@@ -207,7 +207,7 @@ export class OffersController {
     schema: {
       example: {
         statusCode: 400,
-        message: 'DISCOUNT_VALUE_MUST_BE_HIGHER_THAN_0',
+        message: 'ITEMS_MUST_BE_ARRAY',
       },
     },
   })
@@ -217,7 +217,7 @@ export class OffersController {
     schema: {
       example: {
         statusCode: 400,
-        message: 'DISCOUNT_VALUE_MUST_BE_LOWER_THAN_100',
+        message: 'EMPTY_ITEMS_ARRAY',
       },
     },
   })
@@ -227,7 +227,7 @@ export class OffersController {
     schema: {
       example: {
         statusCode: 400,
-        message: 'ITEMS_MUST_BE_ARRAY',
+        message: 'EMPTY_ITEMS_FIELD',
       },
     },
   })
@@ -237,7 +237,7 @@ export class OffersController {
     schema: {
       example: {
         statusCode: 400,
-        message: 'EMPTY_ITEMS_ARRAY',
+        message: 'ITEM_ID_MUST_BE_INTEGER',
       },
     },
   })
@@ -247,7 +247,7 @@ export class OffersController {
     schema: {
       example: {
         statusCode: 400,
-        message: 'EMPTY_ITEMS_FIELD',
+        message: 'EMPTY_ITEM_ID_FIELD',
       },
     },
   })
@@ -257,33 +257,13 @@ export class OffersController {
     schema: {
       example: {
         statusCode: 400,
-        message: 'ITEM_ID_MUST_BE_INTEGER',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.18,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'EMPTY_ITEM_ID_FIELD',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.19,
-    schema: {
-      example: {
-        statusCode: 400,
         message: 'ITEM_QUANTITY_MUST_BE_INTEGER',
       },
     },
   })
   @ApiResponse({
     description: 'The provided value is not valid',
-    status: 400.2,
+    status: 400.18,
     schema: {
       example: {
         statusCode: 400,
@@ -437,7 +417,7 @@ export class OffersController {
     schema: {
       example: {
         statusCode: 400,
-        message: 'PRICE_MUST_BE_NUMBER',
+        message: 'DISCOUNT_MUST_BE_NUMBER',
       },
     },
   })
@@ -447,7 +427,7 @@ export class OffersController {
     schema: {
       example: {
         statusCode: 400,
-        message: 'PRICE_VALUE_MUST_BE_HIGHER_THAN_0.01',
+        message: 'DISCOUNT_VALUE_MUST_BE_HIGHER_THAN_0',
       },
     },
   })
@@ -457,7 +437,7 @@ export class OffersController {
     schema: {
       example: {
         statusCode: 400,
-        message: 'DISCOUNT_MUST_BE_NUMBER',
+        message: 'DISCOUNT_VALUE_MUST_BE_LOWER_THAN_100',
       },
     },
   })
@@ -467,7 +447,7 @@ export class OffersController {
     schema: {
       example: {
         statusCode: 400,
-        message: 'DISCOUNT_VALUE_MUST_BE_HIGHER_THAN_0',
+        message: 'ITEMS_MUST_BE_ARRAY',
       },
     },
   })
@@ -477,7 +457,7 @@ export class OffersController {
     schema: {
       example: {
         statusCode: 400,
-        message: 'DISCOUNT_VALUE_MUST_BE_LOWER_THAN_100',
+        message: 'EMPTY_ITEMS_ARRAY',
       },
     },
   })
@@ -487,7 +467,7 @@ export class OffersController {
     schema: {
       example: {
         statusCode: 400,
-        message: 'ITEMS_MUST_BE_ARRAY',
+        message: 'EMPTY_ITEMS_FIELD',
       },
     },
   })
@@ -497,7 +477,7 @@ export class OffersController {
     schema: {
       example: {
         statusCode: 400,
-        message: 'EMPTY_ITEMS_ARRAY',
+        message: 'ITEM_ID_MUST_BE_INTEGER',
       },
     },
   })
@@ -507,7 +487,7 @@ export class OffersController {
     schema: {
       example: {
         statusCode: 400,
-        message: 'EMPTY_ITEMS_FIELD',
+        message: 'EMPTY_ITEM_ID_FIELD',
       },
     },
   })
@@ -517,33 +497,13 @@ export class OffersController {
     schema: {
       example: {
         statusCode: 400,
-        message: 'ITEM_ID_MUST_BE_INTEGER',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.18,
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'EMPTY_ITEM_ID_FIELD',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'The provided value is not valid',
-    status: 400.19,
-    schema: {
-      example: {
-        statusCode: 400,
         message: 'ITEM_QUANTITY_MUST_BE_INTEGER',
       },
     },
   })
   @ApiResponse({
     description: 'The provided value is not valid',
-    status: 400.2,
+    status: 400.18,
     schema: {
       example: {
         statusCode: 400,

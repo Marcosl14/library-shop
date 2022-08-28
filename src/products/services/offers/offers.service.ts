@@ -55,6 +55,9 @@ export class OffersService {
     const plainDto = instanceToPlain(offerDto);
     const offer = plainToClass(Offer, plainDto);
     offer.offerItems = newOfferItems;
+    offer.price = offer.offerItems
+      .map((offerItem) => offerItem.item.price * offerItem.quantity)
+      .reduce((prev, curr) => prev + curr, 0);
 
     const newOffer = await this.offersRepo.create(offer);
 
@@ -96,6 +99,9 @@ export class OffersService {
     const plainDto = instanceToPlain(offerDto);
     const offer = plainToClass(Offer, plainDto);
     offer.offerItems = newOfferItems;
+    offer.price = offer.offerItems
+      .map((offerItem) => offerItem.item.price * offerItem.quantity)
+      .reduce((prev, curr) => prev + curr, 0);
     offer.id = id;
 
     const updatedOffer = await this.offersRepo.save(offer);
@@ -116,11 +122,7 @@ export class OffersService {
     const offersMatching = await this.offersRepo
       .createQueryBuilder('offers')
       .select(['offers.id', 'ooioi.offerItemsId', 'oi.item_id'])
-      .innerJoin(
-        'offers_offer_items_offer_items',
-        'ooioi',
-        'offers.id = ooioi.offersId',
-      )
+      .innerJoin('offers_offer_items', 'ooioi', 'offers.id = ooioi.offersId')
       .innerJoin('offer_items', 'oi', 'ooioi.offerItemsId = oi.id')
       .where(`oi.item_id IN(${itemsIds})`)
       .getRawMany();
