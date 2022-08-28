@@ -71,18 +71,6 @@ export class UpdateOfferDTO {
 
   @ApiProperty({
     nullable: false,
-    example: 999.99,
-    description: 'Offer Price',
-    type: Number,
-    required: false,
-  })
-  @IsOptional()
-  @IsNumber({}, { message: 'PRICE_MUST_BE_NUMBER' })
-  @Min(0.01, { message: 'PRICE_VALUE_MUST_BE_HIGHER_THAN_0.01' })
-  price: number;
-
-  @ApiProperty({
-    nullable: false,
     example: 25,
     description: 'Offer Discount',
     type: Number,
@@ -92,7 +80,7 @@ export class UpdateOfferDTO {
   @IsNumber({}, { message: 'DISCOUNT_MUST_BE_NUMBER' })
   @Min(0.01, { message: 'DISCOUNT_VALUE_MUST_BE_HIGHER_THAN_0' })
   @Max(100, { message: 'DISCOUNT_VALUE_MUST_BE_LOWER_THAN_100' })
-  discount?: number;
+  discount: number;
 
   @ApiProperty({
     type: RawOfferItem,
