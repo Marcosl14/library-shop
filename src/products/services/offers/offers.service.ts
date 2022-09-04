@@ -31,22 +31,14 @@ export class OffersService {
   async create(offerDto: CreateOfferDTO): Promise<number> {
     const itemsIds = offerDto.items.map((item) => Number(item.id));
 
-    const offerExists = await this.offerExists(itemsIds);
-
-    if (offerExists) {
-      throw new HttpException('OFFER_ALREADY_EXISTS', HttpStatus.CONFLICT);
-    }
-
     const foundItems = await this.itemsRepo.find({ id: In(itemsIds) });
-    const foundItemsIds = foundItems.map((item) => Number(item.id));
 
-    const rawOfferItems: OfferItem[] = this.findRawOfferItems(
+    const rawOfferItems: OfferItem[] = this.createRawOfferItems(
       offerDto,
-      foundItemsIds,
       foundItems,
     );
 
-    const newOfferItems: OfferItem[] = await this.createOfferItemsIfNotFound(
+    const newOfferItems: OfferItem[] = await this.createOfferItems(
       rawOfferItems,
     );
 
@@ -73,26 +65,21 @@ export class OffersService {
       throw new HttpException('OFFER_NOT_FOUND', HttpStatus.NOT_FOUND);
     }
 
+    const oldOfferItemsIds = foundOffer.offerItems.map(
+      (offerItem) => offerItem.id,
+    );
+
     const itemsIds = offerDto.items.map((item) => Number(item.id));
 
-    const offerExists = await this.offerExists(itemsIds);
-
-    if (offerExists && offerExists != id) {
-      throw new HttpException('OFFER_ALREADY_EXISTS', HttpStatus.CONFLICT);
-    }
-
     const foundItems = await this.itemsRepo.find({ id: In(itemsIds) });
-    const foundItemsIds = foundItems.map((item) => Number(item.id));
 
-    const rawOfferItems: OfferItem[] = this.findRawOfferItems(
+    const rawOfferItems: OfferItem[] = this.createRawOfferItems(
       offerDto,
-      foundItemsIds,
       foundItems,
     );
 
-    const newOfferItems: OfferItem[] = await this.createOfferItemsIfNotFound(
-      rawOfferItems,
-    );
+    const newOfferItems: OfferItem[] =
+      await this.updateOrCreateOfferItemsIfNotFound(foundOffer, rawOfferItems);
 
     delete offerDto.items;
 
@@ -105,6 +92,17 @@ export class OffersService {
     offer.id = id;
 
     const updatedOffer = await this.offersRepo.save(offer);
+
+    const newOfferItemsIds = updatedOffer.offerItems.map(
+      (newOfferItem) => newOfferItem.id,
+    );
+
+    oldOfferItemsIds.forEach((oldOfferItemId) => {
+      if (!newOfferItemsIds.includes(oldOfferItemId)) {
+        this.offerItemsRepo.delete(oldOfferItemId);
+      }
+    });
+
     return updatedOffer.id;
   }
 
@@ -118,43 +116,9 @@ export class OffersService {
     await this.offersRepo.softDelete(id);
   }
 
-  async offerExists(itemsIds): Promise<number> {
-    const offersMatching = await this.offersRepo
-      .createQueryBuilder('offers')
-      .select(['offers.id', 'ooioi.offerItemsId', 'oi.item_id'])
-      .innerJoin('offers_offer_items', 'ooioi', 'offers.id = ooioi.offersId')
-      .innerJoin('offer_items', 'oi', 'ooioi.offerItemsId = oi.id')
-      .where(`oi.item_id IN(${itemsIds})`)
-      .getRawMany();
+  createRawOfferItems(offerDto, items): OfferItem[] {
+    const itemsIds = items.map((item) => Number(item.id));
 
-    const filteredOffers = new Set();
-    offersMatching.forEach((element) => {
-      filteredOffers.add(element.offers_id);
-    });
-
-    const foundOffers = await this.offersRepo.find({
-      where: {
-        id: In([...filteredOffers]),
-      },
-    });
-
-    for (let x = 0; x < foundOffers.length; x++) {
-      const offerItem = foundOffers[x].offerItems;
-
-      const foundItemsIds = [];
-      for (let y = 0; y < offerItem.length; y++) {
-        foundItemsIds.push(offerItem[y].item.id);
-      }
-
-      if (foundItemsIds.sort().join(',') === itemsIds.sort().join(',')) {
-        return foundOffers[x].id;
-      }
-    }
-
-    return null;
-  }
-
-  findRawOfferItems(offerDto, itemsIds, items): OfferItem[] {
     const rawOfferItems: OfferItem[] = [];
     offerDto.items.forEach((item) => {
       if (!itemsIds.includes(item.id)) {
@@ -174,27 +138,30 @@ export class OffersService {
     return rawOfferItems;
   }
 
-  async createOfferItemsIfNotFound(rawOfferItems): Promise<OfferItem[]> {
-    const foundOfferItems = await this.offerItemsRepo.find({
-      where: {
-        item: In(rawOfferItems.map((element) => element.item.id)),
-        quantity: In(rawOfferItems.map((element) => element.quantity)),
-      },
-    });
-
+  async createOfferItems(rawOfferItems): Promise<OfferItem[]> {
     const newOfferItems: OfferItem[] = [];
     for (let index = 0; index < rawOfferItems.length; index++) {
-      if (
-        foundOfferItems
-          .map((foundOfferItem) => foundOfferItem.item.id)
-          .includes(rawOfferItems[index].item.id)
-      ) {
-        newOfferItems.push(
-          foundOfferItems.find(
-            (foundOfferItem) =>
-              foundOfferItem.item.id == rawOfferItems[index].item.id,
-          ),
-        );
+      newOfferItems.push(await this.offerItemsRepo.save(rawOfferItems[index]));
+    }
+
+    return newOfferItems;
+  }
+
+  async updateOrCreateOfferItemsIfNotFound(
+    offer,
+    rawOfferItems,
+  ): Promise<OfferItem[]> {
+    const newOfferItems: OfferItem[] = [];
+
+    for (let index = 0; index < rawOfferItems.length; index++) {
+      const foundOfferItem = offer.offerItems.find(
+        (offerItem) => offerItem.item.id == rawOfferItems[index].item.id,
+      );
+
+      if (foundOfferItem) {
+        foundOfferItem.quantity = rawOfferItems[index].quantity;
+        await this.offerItemsRepo.update(foundOfferItem.id, foundOfferItem),
+          newOfferItems.push(foundOfferItem);
       } else {
         newOfferItems.push(
           await this.offerItemsRepo.save(rawOfferItems[index]),

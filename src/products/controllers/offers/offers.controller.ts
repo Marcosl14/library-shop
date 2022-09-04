@@ -301,16 +301,6 @@ export class OffersController {
       },
     },
   })
-  @ApiResponse({
-    description: 'There is already an offer with the same items',
-    status: 409.01,
-    schema: {
-      example: {
-        statusCode: 409,
-        message: 'OFFER_ALREADY_EXISTS',
-      },
-    },
-  })
   @Roles(Role.Admin)
   @Post()
   async createOffer(@Body() offerDTO: CreateOfferDTO) {
@@ -548,16 +538,6 @@ export class OffersController {
       example: {
         statusCode: 404,
         message: 'OFFER_NOT_FOUND',
-      },
-    },
-  })
-  @ApiResponse({
-    description: 'There is already an offer with the same items',
-    status: 409.01,
-    schema: {
-      example: {
-        statusCode: 409,
-        message: 'OFFER_ALREADY_EXISTS',
       },
     },
   })
