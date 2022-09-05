@@ -167,7 +167,7 @@ export class OffersController {
     schema: {
       example: {
         statusCode: 400,
-        message: 'PHOTO_MAX_LENGTH: 100',
+        message: 'PHOTO_MAX_LENGTH: 1000',
       },
     },
   })
@@ -397,7 +397,7 @@ export class OffersController {
     schema: {
       example: {
         statusCode: 400,
-        message: 'PHOTO_MAX_LENGTH: 100',
+        message: 'PHOTO_MAX_LENGTH: 1000',
       },
     },
   })

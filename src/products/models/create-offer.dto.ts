@@ -60,8 +60,8 @@ export class CreateOfferDTO {
   })
   @IsOptional()
   @IsUrl({ message: 'PHOTO_MUST_BE_A_URL_ADRESS' })
-  @MaxLength(100, {
-    message: 'PHOTO_MAX_LENGTH: 100',
+  @MaxLength(1000, {
+    message: 'PHOTO_MAX_LENGTH: 1000',
   })
   photo?: string;
 
