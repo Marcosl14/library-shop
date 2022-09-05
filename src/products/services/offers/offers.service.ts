@@ -113,7 +113,7 @@ export class OffersService {
       throw new HttpException('OFFER_NOT_FOUND', HttpStatus.NOT_FOUND);
     }
 
-    await this.offersRepo.softDelete(id);
+    await this.offersRepo.delete(id);
   }
 
   createRawOfferItems(offerDto, items): OfferItem[] {
